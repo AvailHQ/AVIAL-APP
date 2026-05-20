@@ -34,6 +34,114 @@ AVIAL-APP/
     └── src/
 ```
 
+## Development Flow And Current Progress
+
+AVAIL development is staged. Do not jump straight to backend, model logic, or real athlete data before the earlier guardrails are in place.
+
+```text
+0. Guardrails
+   ↓
+1. Pure Frontend Prototype
+   ↓
+2. Prototype Hardening
+   ↓
+3. Frontend Architecture Decision
+   ↓
+4. Production-Like Frontend Foundation
+   ↓
+5. Backend / API Architecture
+   ↓
+6. Data Model And Persistence
+   ↓
+7. MVP Load Score And Confidence Logic
+   ↓
+8. Pilot Workflow Readiness
+   ↓
+9. Security, Legal, And Expert Review Gate
+   ↓
+10. Pilot Deployment
+```
+
+Full milestone details live in:
+
+```text
+docs/dev/milestone.md
+```
+
+### Current Stage
+
+Current stage:
+
+```text
+Milestone 1 - Pure Frontend Prototype
+```
+
+The prototype exists and builds, but it still needs review fixes and hardening before it should be treated as founder/coach walkthrough material.
+
+### Completed
+
+- Core product docs exist: `docs/PRD.md`, `docs/Avail_Proposal_v2.md`
+- Design guidance exists: `docs/design.md`
+- Prototype scope exists: `avail-prototype/prototype_scope.md`
+- Development guardrails exist:
+  - `docs/dev/product_boundaries.md`
+  - `docs/dev/data_privacy_rules.md`
+  - `docs/dev/copy_language_rules.md`
+- Skill usage docs exist:
+  - `docs/dev/agent_skill_usage.md`
+  - `docs/dev/skill_roadmap.md`
+- Milestone roadmap exists: `docs/dev/milestone.md`
+- Pure frontend prototype exists in `avail-prototype/`
+- Prototype build passes with `npm.cmd run build`
+- `.gitignore` excludes `node_modules/`, `dist/`, `.claude/`, logs, and local env files
+- `avail-product-reviewer` skill has been created
+- External review skills have been installed:
+  - `react-best-practices`
+  - `web-design-guidelines`
+  - `composition-patterns`
+
+### In Progress
+
+- Fix current prototype review findings
+- Harden prototype UI and interaction details
+- Keep coach-facing data restricted to sanitized context only
+- Improve copy where it still drifts toward training advice or consent disclosure
+
+### Not Yet Complete
+
+- `docs/dev/code_maintenance_rules.md`
+- `docs/dev/review_checklist.md`
+- `docs/dev/frontend_architecture_rules.md`
+- `avail-frontend-builder` skill
+- `avail-data-privacy-architect` skill
+- `avail-model-logic-reviewer` skill
+- Production frontend architecture decision
+- Backend/API architecture
+- Database schema
+- Real consent middleware
+- Real Load Score calculation
+- Real confidence calculation
+- Real auth
+- Real wearable integration
+- Security/legal/expert review gate
+- Pilot deployment
+
+### Immediate Next Steps
+
+1. Fix current `avail-product-reviewer` prototype findings.
+2. Add `docs/dev/code_maintenance_rules.md`.
+3. Add `docs/dev/review_checklist.md`.
+4. Re-review prototype with:
+
+```text
+avail-product-reviewer
+react-best-practices
+web-design-guidelines
+composition-patterns
+```
+
+5. Create `avail-frontend-builder` before major frontend expansion.
+
 ## Key Documents
 
 Start here:
