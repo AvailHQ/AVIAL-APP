@@ -9,6 +9,14 @@ docs/diagrams/img/ER-Athlete.png
 
 This document explains the athlete-perspective ER diagram as a backend implementation reference.
 
+Shared entity definitions live in:
+
+```text
+docs/diagrams/ER-Shared.md
+```
+
+Use `ER-Shared.md` as the source of truth for shared entities such as `USER`, `TEAMS`, `USER_TEAM`, `MODEL_VERSION`, `LOAD_SCORE`, `LOAD_SCORE_GENERATION_LOG`, `TRAINING_SESSION`, `TRAINING_SESSION_ATHLETE`, and `AVAILABILITY_EVENT`.
+
 The diagram is not only a user journey diagram. It includes athlete-owned data, training participation, model outputs, privacy/governance records, and supporting reference tables needed to build the athlete-side data model safely.
 
 ## Core Boundary
@@ -79,41 +87,7 @@ Do not create indexes to make coach access to restricted athlete-owned data easi
 
 These columns reflect the current `ER-Athlete.png` diagram and add recommended enum values for backend schema design. Use `snake_case` in implementation even where the diagram still uses mixed casing.
 
-### USER Columns
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `user_id` | `int` | Primary key. |
-| `first_name` | `varchar` | User first name. |
-| `last_name` | `varchar` | User last name. |
-| `email` | `varchar` | Should be unique. |
-| `phone` | `varchar` | Use string, not int. |
-| `account_status` | `enum` | `active`, `onboarding`, `suspended`, `inactive`, `archived`. |
-| `created_at` | `datetime` | Account creation timestamp. |
-
-### TEAMS Columns
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `team_id` | `int` | Primary key. |
-| `primary_sport_id` | `int` | FK to `SPORTS.sport_id`. |
-| `team_name` | `varchar` | Team/squad name. |
-| `level` | `enum` | `university`, `semi_pro`, `professional`, `elite`. |
-| `join_time` | `datetime` | Team onboarding/join date in AVAIL. |
-| `country` | `varchar` | Country code or country name. |
-| `created_at` | `datetime` | Row creation timestamp. |
-
-### USER_TEAM Columns
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `user_team_id` | `int` | Primary key. |
-| `user_id` | `int` | FK to `USER.user_id`. |
-| `team_id` | `int` | FK to `TEAMS.team_id`. |
-| `role_in_team` | `enum` | `athlete`, `coach`, `staff`, `admin`, `physio`, `sport_scientist`. |
-| `join_at` | `datetime` | Membership start timestamp. |
-| `leave_at` | `datetime nullable` | Membership end timestamp. |
-| `is_active` | `boolean` | Whether this membership is currently active. |
+Shared entity columns and types are defined in `ER-Shared.md`. This section only defines athlete-specific entities and athlete-side reference tables.
 
 ### SPORTS Columns
 
@@ -200,45 +174,6 @@ This table contains restricted athlete-owned data.
 | `period_ended` | `boolean` | Athlete tapped period ended. |
 | `submitted_at` | `datetime` | Submission timestamp. |
 
-### MODEL_VERSION Columns
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `version_id` | `int` | Primary key. |
-| `version_tag` | `varchar` | Example: `1.0.2`. |
-| `deployed_at` | `datetime` | Deployment timestamp. |
-| `is_current_use` | `boolean` | Whether this is current production/default model version. |
-| `change_log` | `text` | Summary of model changes. |
-
-### LOAD_SCORE Columns
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `score_id` | `int` | Primary key. |
-| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
-| `checkin_id` | `int nullable` | Optional FK to `ATHLETE_DAILY_CHECKIN.checkin_id`. |
-| `version_id` | `int` | FK to `MODEL_VERSION.version_id`. |
-| `score_value` | `int` | 0-100 relative load tolerance estimate. |
-| `confidence_level` | `enum` | `high`, `medium`, `low`, `very_low`. |
-| `context_summary` | `text` | Human-readable internal/context summary. |
-| `is_personalised` | `boolean` | Whether personalised logic was used. |
-| `generated_at` | `datetime` | Score generation timestamp. |
-
-### LOAD_SCORE_GENERATION_LOG Columns
-
-Recommended future name: `MODEL_RUN`.
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `model_run_id` | `int` | Primary key. |
-| `score_id` | `int` | FK/reference to `LOAD_SCORE.score_id`. |
-| `model_version_id` | `int` | FK/reference to `MODEL_VERSION.version_id`. |
-| `input_completeness_state` | `enum` | `complete`, `partial`, `limited`, `estimated`, `unavailable`. |
-| `estimation_used` | `boolean` | Whether fallback/estimation logic was used. |
-| `missing_data_categories` | `text` | Comma-separated or JSON list of missing categories. |
-| `confidence_reason` | `text` | Why the confidence level was assigned. |
-| `generated_at` | `datetime` | Model run timestamp. |
-
 ### ATHLETE_CONTEXT_STATE Columns
 
 Current rolling context state. This table contains restricted inferred context.
@@ -255,31 +190,6 @@ Current rolling context state. This table contains restricted inferred context.
 | `cycle_phase_inferred` | `enum` | `menstrual`, `follicular`, `ovulatory`, `luteal`, `suppressed`, `irregular`, `unknown`, `not_applicable`. Restricted; not coach-facing. |
 | `is_conservative_mode` | `boolean` | Whether conservative mode is active. |
 | `last_updated` | `datetime` | Last state update timestamp. |
-
-### TRAINING_SESSION Columns
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `session_id` | `int` | Primary key. |
-| `team_id` | `int` | FK to `TEAMS.team_id`. |
-| `created_by` | `int` | FK to `USER.user_id`; coach user. |
-| `training_session_date` | `datetime` | Session date/time. |
-| `training_session_type` | `enum` | `recovery`, `technical`, `moderate_load`, `high_load`, `match_competition`, `gym_strength`. |
-| `training_intensity` | `enum` | `low`, `moderate`, `high`, `very_high`. |
-
-### TRAINING_SESSION_ATHLETE Columns
-
-Associative entity with session-specific athlete planning data.
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `session_athlete_id` | `int` | Primary key. |
-| `session_id` | `int` | FK to `TRAINING_SESSION.session_id`. |
-| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
-| `score_id` | `int` | FK/reference to `LOAD_SCORE.score_id` used as pre-session context. |
-| `planned_load_intensity` | `enum` | `low`, `moderate`, `high`, `very_high`. |
-| `actual_participation_status` | `enum nullable` | `full`, `modified`, `partial`, `not_available`, `rested`, `unknown`. |
-| `final_direction` | `enum` | `increase`, `maintain`, `reduce`, `recovery_focus`. |
 
 ### SESSION_OUTCOME Columns
 
@@ -377,23 +287,6 @@ Athlete-facing notification/prompt table.
 | `read_at` | `datetime nullable` | Read timestamp. |
 | `response_at` | `datetime nullable` | Response timestamp if prompt requires response. |
 
-### AVAILABILITY_EVENT Columns
-
-Operational availability event.
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `event_id` | `int` | Primary key. |
-| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
-| `team_id` | `int` | FK to `TEAMS.team_id`. |
-| `reported_by` | `int` | FK to `USER.user_id`; coach/staff user. |
-| `session_id` | `int nullable` | Optional FK to `TRAINING_SESSION.session_id`. |
-| `event_type` | `enum` | `available`, `modified_training`, `partial_training`, `missed_session`, `illness`, `injury`, `return_to_play`, `other`. |
-| `event_date` | `datetime` | Event date/time. |
-| `return_date` | `datetime nullable` | Expected or actual return date. |
-| `load_score_context` | `json` | Sanitized snapshot only; no raw sensitive athlete data. |
-| `note` | `text` | Operational note; must avoid raw sensitive details. |
-
 ## Entity Relationships
 
 ### USER
@@ -420,11 +313,7 @@ Relationships:
 | `USER` -> `WELFARE_FLAG`             |         1:M | Athlete can have restricted welfare flags.                 |
 | `USER` -> `AVAILABILITY_EVENT`       |         1:M | Athlete can have many availability events.                 |
 
-Recommended indexes:
-
-- PK: `user_id`
-- Unique: `email`
-- Index: `account_status`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### TEAMS
 
@@ -439,11 +328,7 @@ Relationships:
 | `TEAMS` -> `AVAILABILITY_EVENT` |         1:M | Availability events are team-scoped.         |
 | `SPORTS` -> `TEAMS`             |         1:M | A sport can be primary sport for many teams. |
 
-Recommended indexes:
-
-- PK: `team_id`
-- Index: `primary_sport_id`
-- Index: `(team_name, country)`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### USER_TEAM
 
@@ -456,14 +341,7 @@ Relationships:
 | `USER` -> `USER_TEAM`  |         1:M | User may have multiple team memberships. |
 | `TEAMS` -> `USER_TEAM` |         1:M | Team may have many members.              |
 
-Recommended indexes:
-
-- PK: `user_team_id`
-- Unique: `(user_id, team_id, role_in_team, join_at)`
-- Index: `user_id`
-- Index: `team_id`
-- Index: `(team_id, role_in_team, is_active)`
-- Index: `(user_id, is_active)`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### SPORTS
 
@@ -597,12 +475,7 @@ Relationships:
 | `MODEL_VERSION` -> `LOAD_SCORE_GENERATION_LOG` |         1:M | Many generation logs can reference one model version. |
 | `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE`     |         1:M | Context states should record model version used.      |
 
-Recommended indexes:
-
-- PK: `version_id`
-- Unique: `version_tag`
-- Index: `is_current_use`
-- Index: `deployed_at`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### LOAD_SCORE
 
@@ -621,14 +494,7 @@ Relationships:
 | `LOAD_SCORE` -> `TRAINING_SESSION_ATHLETE`  |                1:M | Same score may inform more than one athlete-session.                        |
 | `LOAD_SCORE` -> `SESSION_OUTCOME`           | indirect preferred | Prefer `SESSION_OUTCOME -> TRAINING_SESSION_ATHLETE -> LOAD_SCORE`.         |
 
-Recommended indexes:
-
-- PK: `score_id`
-- Index: `user_id`
-- Index: `checkin_id`
-- Index: `version_id`
-- Index: `(user_id, generated_at)`
-- Index: `(user_id, confidence_level, generated_at)`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### LOAD_SCORE_GENERATION_LOG
 
@@ -647,27 +513,7 @@ Relationships:
 | `LOAD_SCORE` -> `LOAD_SCORE_GENERATION_LOG`    |      1:0..M | One score may have generation/provenance logs. |
 | `MODEL_VERSION` -> `LOAD_SCORE_GENERATION_LOG` |         1:M | Logs record model version.                     |
 
-Recommended indexes:
-
-- PK: `model_run_id`
-- Index: `score_id`
-- Index: `model_version_id`
-- Index: `generated_at`
-- Index: `(score_id, generated_at)`
-
-Implementation note:
-
-`input_completeness_state` should be an enum rather than a boolean.
-
-Suggested values:
-
-```text
-complete
-partial
-limited
-estimated
-unavailable
-```
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### ATHLETE_CONTEXT_STATE
 
@@ -709,13 +555,7 @@ Relationships:
 | `TRAINING_SESSION` -> `TRAINING_SESSION_ATHLETE` |         1:M | Session includes many athletes.                      |
 | `TRAINING_SESSION` -> `AVAILABILITY_EVENT`       |      1:0..M | Availability event may optionally reference session. |
 
-Recommended indexes:
-
-- PK: `session_id`
-- Index: `team_id`
-- Index: `created_by`
-- Index: `(team_id, training_session_date)`
-- Index: `(created_by, training_session_date)`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### TRAINING_SESSION_ATHLETE
 
@@ -730,15 +570,7 @@ Relationships:
 | `LOAD_SCORE` -> `TRAINING_SESSION_ATHLETE`       |         1:M | Score used as pre-session context.            |
 | `TRAINING_SESSION_ATHLETE` -> `SESSION_OUTCOME`  |      1:0..1 | Athlete may submit one outcome for a session. |
 
-Recommended indexes:
-
-- PK: `session_athlete_id`
-- Unique: `(session_id, user_id)`
-- Index: `session_id`
-- Index: `user_id`
-- Index: `score_id`
-- Index: `(user_id, session_id)`
-- Index: `(session_id, actual_participation_status)`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 ### SESSION_OUTCOME
 
@@ -898,16 +730,7 @@ Relationships:
 | `USER(coach)` -> `AVAILABILITY_EVENT`      |         1:M | Coach may report many events.  |
 | `TRAINING_SESSION` -> `AVAILABILITY_EVENT` |      1:0..M | Session reference is nullable. |
 
-Recommended indexes:
-
-- PK: `event_id`
-- Index: `user_id`
-- Index: `team_id`
-- Index: `reported_by`
-- Index: `session_id`
-- Index: `(user_id, event_date)`
-- Index: `(team_id, event_date)`
-- Index: `event_type`
+Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
 Implementation note:
 
