@@ -17,6 +17,13 @@ AVIAL-APP/
 │   ├── PRD.md
 │   ├── Avail_Proposal_v2.md
 │   ├── design.md
+│   ├── diagrams/
+│   │   ├── ER-Shared.md
+│   │   ├── ER-Athlete.md
+│   │   ├── ER-Coach.md
+│   │   └── img/
+│   │       ├── ER-Athlete.png
+│   │       └── ER-Coach.png
 │   └── dev/
 │       ├── product_boundaries.md
 │       ├── data_privacy_rules.md
@@ -82,6 +89,10 @@ The prototype exists and builds, but it still needs review fixes and hardening b
 
 - Core product docs exist: `docs/PRD.md`, `docs/Avail_Proposal_v2.md`
 - Design guidance exists: `docs/design.md`
+- ER diagram documentation exists:
+  - `docs/diagrams/ER-Shared.md`
+  - `docs/diagrams/ER-Athlete.md`
+  - `docs/diagrams/ER-Coach.md`
 - Prototype scope exists: `avail-prototype/prototype_scope.md`
 - Development guardrails exist:
   - `docs/dev/product_boundaries.md`
@@ -117,7 +128,7 @@ The prototype exists and builds, but it still needs review fixes and hardening b
 - `avail-model-logic-reviewer` skill
 - Production frontend architecture decision
 - Backend/API architecture
-- Database schema
+- Implemented database schema
 - Real consent middleware
 - Real Load Score calculation
 - Real confidence calculation
@@ -172,6 +183,15 @@ Start here:
 
 9. `docs/dev/skill_roadmap.md`  
    Completed and planned Codex skills for AVAIL development.
+
+10. `docs/diagrams/ER-Shared.md`  
+    Shared backend schema reference for entities used by both athlete-side and coach-side ER diagrams.
+
+11. `docs/diagrams/ER-Athlete.md`  
+    Athlete-perspective ER diagram notes, restricted athlete-owned data boundaries, relationships, columns, enum suggestions, and implementation rules.
+
+12. `docs/diagrams/ER-Coach.md`  
+    Coach-perspective ER diagram notes for sanitized coach views, different-decision logging, audit logging, and coach-facing access boundaries.
 
 ## First-Time Setup
 
