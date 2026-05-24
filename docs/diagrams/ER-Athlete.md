@@ -43,6 +43,357 @@ Athlete-owned restricted tables include:
 | Green  | Junction / associative entity                     |
 | White  | Identity, team, sport, session, or reference data |
 
+## Index Guidance
+
+The index lists in this document are design guidance, not an instruction to create every index on day one.
+
+When implementing the backend schema, split indexes into:
+
+```text
+Required constraints / indexes
+```
+
+Use these for data integrity:
+
+- Primary keys
+- Foreign keys
+- Unique constraints that enforce business rules
+- Minimal indexes needed by required foreign-key relationships, depending on database engine
+
+```text
+Optional query-driven indexes
+```
+
+Use these only when the application has a known query pattern or performance need:
+
+- Dashboard filtering
+- Timeline queries
+- Active membership lookups
+- Recent check-in retrieval
+- Model history lookup
+- Reporting queries
+
+Do not create indexes to make coach access to restricted athlete-owned data easier. Coach-facing workflows should use sanitized output/read models, not direct queries against athlete-owned restricted tables.
+
+## Entity Columns And Types
+
+These columns reflect the current `ER-Athlete.png` diagram and add recommended enum values for backend schema design. Use `snake_case` in implementation even where the diagram still uses mixed casing.
+
+### USER Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `user_id` | `int` | Primary key. |
+| `first_name` | `varchar` | User first name. |
+| `last_name` | `varchar` | User last name. |
+| `email` | `varchar` | Should be unique. |
+| `phone` | `varchar` | Use string, not int. |
+| `account_status` | `enum` | `active`, `onboarding`, `suspended`, `inactive`, `archived`. |
+| `created_at` | `datetime` | Account creation timestamp. |
+
+### TEAMS Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `team_id` | `int` | Primary key. |
+| `primary_sport_id` | `int` | FK to `SPORTS.sport_id`. |
+| `team_name` | `varchar` | Team/squad name. |
+| `level` | `enum` | `university`, `semi_pro`, `professional`, `elite`. |
+| `join_time` | `datetime` | Team onboarding/join date in AVAIL. |
+| `country` | `varchar` | Country code or country name. |
+| `created_at` | `datetime` | Row creation timestamp. |
+
+### USER_TEAM Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `user_team_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`. |
+| `team_id` | `int` | FK to `TEAMS.team_id`. |
+| `role_in_team` | `enum` | `athlete`, `coach`, `staff`, `admin`, `physio`, `sport_scientist`. |
+| `join_at` | `datetime` | Membership start timestamp. |
+| `leave_at` | `datetime nullable` | Membership end timestamp. |
+| `is_active` | `boolean` | Whether this membership is currently active. |
+
+### SPORTS Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `sport_id` | `int` | Primary key. |
+| `sport_name` | `varchar` | Example: `Football`, `Swimming`, `Rugby`. |
+| `sport_category` | `enum` | `team_field`, `team_court`, `endurance`, `strength_power`, `aquatic`, `individual`, `other`. |
+
+### SPORT_POSITION Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `sport_position_id` | `int` | Primary key. |
+| `sport_id` | `int` | FK to `SPORTS.sport_id`. |
+| `position_name` | `varchar` | Sport-specific position name. |
+
+### ATHLETE_SPORT_BACKGROUND Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `user_sport_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `sport_id` | `int` | FK to `SPORTS.sport_id`. |
+| `sport_position_id` | `int nullable` | FK to `SPORT_POSITION.sport_position_id`; nullable when unknown or not applicable. |
+| `year_of_experience` | `int` | Years of experience in this sport. |
+| `is_primary` | `boolean` | Whether this is the athlete's primary sport background. |
+| `start_date` | `datetime` | Start date for this background record. |
+| `end_date` | `datetime nullable` | End date, nullable for current record. |
+
+### ATHLETE_PROFILE Columns
+
+This table contains restricted athlete-owned data.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `profile_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. Should be unique. |
+| `cycle_regularity` | `enum` | `regular`, `irregular`, `absent`, `not_applicable`, `prefer_not_to_say`. |
+| `contraception_type` | `enum` | `combined_pill_or_patch`, `progesterone_only`, `implant`, `hormonal_iud`, `non_hormonal`, `none`, `prefer_not_to_say`. |
+| `diagnosed_condition` | `text` | Controlled multi-select text/JSON if needed. Suggested values: `dysmenorrhea`, `pcos`, `endometriosis`, `none`, `prefer_not_to_say`. |
+| `reds_history` | `enum` | `yes`, `no`, `prefer_not_to_say`. |
+| `training_years` | `enum` | `under_2`, `two_to_five`, `five_to_ten`, `ten_plus`. |
+| `primary_training` | `enum` | `endurance_dominant`, `strength_dominant`, `mixed`, `technical`, `other`. |
+| `weekly_hours` | `enum` | `under_5`, `five_to_ten`, `ten_to_fifteen`, `fifteen_plus`. |
+| `dietary_pattern` | `enum` | `high_carbohydrate`, `plant_based`, `mixed_omnivore`, `high_protein`, `restricted`, `other`, `prefer_not_to_say`. |
+| `ethnicity_text` | `text` | Restricted; use for athlete-controlled profile/dataset diversity only. |
+| `neurodivergent_profile` | `enum` | `adhd`, `autism`, `both`, `neither`, `prefer_not_to_say`. |
+| `sleep_sensitivity` | `enum` | `highly_variable`, `fairly_consistent`, `very_consistent`, `not_sure`. |
+| `rpe_calibration` | `enum` | `underreport_effort`, `accurate`, `overreport_effort`, `not_sure`. |
+| `energy_availability_concern` | `enum` | `rarely_fuelled`, `sometimes`, `usually_fine`, `prefer_not_to_say`. |
+| `iron_supplementation` | `enum` | `currently_supplementing`, `previously_low`, `no`, `prefer_not_to_say`. |
+| `completed_at` | `datetime` | Onboarding completion timestamp. |
+
+### CYCLE_LOG Columns
+
+This table contains restricted athlete-owned data.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `cycle_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `cycle_start` | `datetime` | Cycle start timestamp/date. |
+| `cycle_end` | `datetime nullable` | Cycle end timestamp/date. |
+| `cycle_length_days` | `int nullable` | Calculated length when enough data exists. |
+| `is_retroactive` | `boolean` | Whether the athlete entered this after the fact. |
+| `created_at` | `datetime` | Row creation timestamp. |
+
+### ATHLETE_DAILY_CHECKIN Columns
+
+This table contains restricted athlete-owned data.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `checkin_id` | `int` | Primary key. |
+| `cycle_id` | `int nullable` | Optional FK to `CYCLE_LOG.cycle_id`. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `checkin_date` | `datetime` | Date/time of check-in. |
+| `sleep_quality` | `int` | Scale 1-5. |
+| `fatigue_level` | `int` | Scale 1-5. |
+| `soreness_level` | `int` | Scale 1-5. |
+| `mental_readiness` | `int` | Scale 1-5; performance framing only. |
+| `period_started` | `boolean` | Athlete tapped period started. |
+| `period_ended` | `boolean` | Athlete tapped period ended. |
+| `submitted_at` | `datetime` | Submission timestamp. |
+
+### MODEL_VERSION Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `version_id` | `int` | Primary key. |
+| `version_tag` | `varchar` | Example: `1.0.2`. |
+| `deployed_at` | `datetime` | Deployment timestamp. |
+| `is_current_use` | `boolean` | Whether this is current production/default model version. |
+| `change_log` | `text` | Summary of model changes. |
+
+### LOAD_SCORE Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `score_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `checkin_id` | `int nullable` | Optional FK to `ATHLETE_DAILY_CHECKIN.checkin_id`. |
+| `version_id` | `int` | FK to `MODEL_VERSION.version_id`. |
+| `score_value` | `int` | 0-100 relative load tolerance estimate. |
+| `confidence_level` | `enum` | `high`, `medium`, `low`, `very_low`. |
+| `context_summary` | `text` | Human-readable internal/context summary. |
+| `is_personalised` | `boolean` | Whether personalised logic was used. |
+| `generated_at` | `datetime` | Score generation timestamp. |
+
+### LOAD_SCORE_GENERATION_LOG Columns
+
+Recommended future name: `MODEL_RUN`.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `model_run_id` | `int` | Primary key. |
+| `score_id` | `int` | FK/reference to `LOAD_SCORE.score_id`. |
+| `model_version_id` | `int` | FK/reference to `MODEL_VERSION.version_id`. |
+| `input_completeness_state` | `enum` | `complete`, `partial`, `limited`, `estimated`, `unavailable`. |
+| `estimation_used` | `boolean` | Whether fallback/estimation logic was used. |
+| `missing_data_categories` | `text` | Comma-separated or JSON list of missing categories. |
+| `confidence_reason` | `text` | Why the confidence level was assigned. |
+| `generated_at` | `datetime` | Model run timestamp. |
+
+### ATHLETE_CONTEXT_STATE Columns
+
+Current rolling context state. This table contains restricted inferred context.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `state_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. Should be unique for current-state table. |
+| `model_version_id` | `int` | FK to `MODEL_VERSION.version_id`. |
+| `rolling_fatigue` | `float` | Internal rolling fatigue measure. |
+| `recovery_trend` | `enum` | `improving`, `stable`, `declining`, `insufficient_data`. |
+| `context_stability` | `float` | Internal stability score/measure. |
+| `confidence_state` | `enum` | `high`, `medium`, `low`, `very_low`. |
+| `cycle_phase_inferred` | `enum` | `menstrual`, `follicular`, `ovulatory`, `luteal`, `suppressed`, `irregular`, `unknown`, `not_applicable`. Restricted; not coach-facing. |
+| `is_conservative_mode` | `boolean` | Whether conservative mode is active. |
+| `last_updated` | `datetime` | Last state update timestamp. |
+
+### TRAINING_SESSION Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `session_id` | `int` | Primary key. |
+| `team_id` | `int` | FK to `TEAMS.team_id`. |
+| `created_by` | `int` | FK to `USER.user_id`; coach user. |
+| `training_session_date` | `datetime` | Session date/time. |
+| `training_session_type` | `enum` | `recovery`, `technical`, `moderate_load`, `high_load`, `match_competition`, `gym_strength`. |
+| `training_intensity` | `enum` | `low`, `moderate`, `high`, `very_high`. |
+
+### TRAINING_SESSION_ATHLETE Columns
+
+Associative entity with session-specific athlete planning data.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `session_athlete_id` | `int` | Primary key. |
+| `session_id` | `int` | FK to `TRAINING_SESSION.session_id`. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `score_id` | `int` | FK/reference to `LOAD_SCORE.score_id` used as pre-session context. |
+| `planned_load_intensity` | `enum` | `low`, `moderate`, `high`, `very_high`. |
+| `actual_participation_status` | `enum nullable` | `full`, `modified`, `partial`, `not_available`, `rested`, `unknown`. |
+| `final_direction` | `enum` | `increase`, `maintain`, `reduce`, `recovery_focus`. |
+
+### SESSION_OUTCOME Columns
+
+Athlete-owned post-session feedback.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `outcome_id` | `int` | Primary key. |
+| `checkin_id` | `int nullable` | Optional FK to `ATHLETE_DAILY_CHECKIN.checkin_id`. |
+| `session_athlete_id` | `int` | FK to `TRAINING_SESSION_ATHLETE.session_athlete_id`. |
+| `score_id` | `int` | Optional snapshot/reference to score used at outcome time. Consider removing if `TRAINING_SESSION_ATHLETE.score_id` is source of truth. |
+| `outcome` | `enum` | `easier_than_expected`, `as_expected`, `harder_than_expected`. |
+| `if_different_reason` | `enum nullable` | Better name: `harder_than_expected_reason`. Suggested: `physical_fatigue`, `recovery_not_fully_there`, `soreness`, `mental_exhaustion`, `session_intensity`, `other`. |
+| `submitted_at` | `datetime` | Submission timestamp. |
+
+### WEARABLE_CONNECTION Columns
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `connection_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `device_type` | `enum` | `oura`, `whoop`, `garmin`, `apple_health`, `catapult`, `kitman`, `manual_import`, `other`. |
+| `oauth_token_hash` | `varchar` | Hashed/encrypted token reference, never raw token. |
+| `token_expiry` | `datetime` | Token expiry timestamp. |
+| `last_sync_at` | `datetime` | Last successful sync timestamp. |
+| `is_active` | `boolean` | Whether connection is active. |
+
+### WEARABLE_SIGNAL Columns
+
+This table contains restricted athlete-owned raw wearable data.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `signal_id` | `int` | Primary key. |
+| `connection_id` | `int` | FK to `WEARABLE_CONNECTION.connection_id`. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `device_type` | `enum` | Same options as `WEARABLE_CONNECTION.device_type`. |
+| `hrv` | `float nullable` | Heart-rate variability. |
+| `resting_hr` | `float nullable` | Resting heart rate. |
+| `skin_temp_deviation` | `float nullable` | Skin temperature deviation. |
+| `sleep_score` | `float nullable` | Device sleep score. |
+| `sleep_duration` | `float nullable` | Sleep duration, preferably hours. |
+| `readiness_score` | `float nullable` | Device readiness score. |
+| `strain` | `float nullable` | Device strain/load measure. |
+| `recorded_date` | `datetime` | Date/time signal was recorded by source. |
+| `synced_at` | `datetime` | Date/time signal was synced into AVAIL. |
+
+### CONSENT_RECORD Columns
+
+Athlete-owned consent history.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `consent_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `consent_type` | `enum` | `coach_context_sharing`, `medical_welfare_flag`, `wearable_sync`, `model_training`, `anonymised_dataset`, `research_use`. |
+| `data_category` | `enum` | `structured_context`, `daily_checkin`, `cycle_data`, `wearable_signal`, `session_outcome`, `welfare_flag`, `profile_baseline`, `availability_event`. |
+| `purpose` | `text` | Purpose for consent. |
+| `is_grant` | `boolean` | True for grant, false for withdrawal/denial event. |
+| `grant_at` | `datetime` | Grant timestamp. |
+| `withdrawn_at` | `datetime nullable` | Withdrawal timestamp. |
+| `consent_version` | `varchar` | Version of consent wording/policy. |
+
+### WELFARE_FLAG Columns
+
+Restricted welfare pattern flag. Never coach-facing.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `flag_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `flag_type` | `enum` | `reds_pattern`, `wellbeing_pattern`, `low_energy_pattern`, `sustained_low_readiness`, `other`. |
+| `trigger_date` | `datetime` | Trigger timestamp. |
+| `signals_triggered` | `text` | Restricted description of triggered signals. |
+| `athlete_response` | `enum` | `already_spoken_to_medical`, `would_like_to_speak`, `fine`, `not_sure`, `no_response`. |
+| `response_at` | `datetime nullable` | Athlete response timestamp. |
+| `medic_notified` | `boolean` | Whether medic was notified under consent. |
+| `is_resolved` | `boolean` | Whether flag is resolved. |
+| `resolved_at` | `datetime nullable` | Resolution timestamp. |
+
+### NOTIFICATION Columns
+
+Athlete-facing notification/prompt table.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `notification_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `reference_type` | `enum` | `welfare_alert`, `checkin_reminder`, `low_confidence_alert`, `session_outcome_prompt`, `consent_update`, `system_message`. |
+| `reference_id` | `int nullable` | Polymorphic reference; not strict FK. |
+| `type` | `enum` | `prompt`, `reminder`, `status_update`, `welfare_prompt`, `system`. |
+| `message_category` | `enum` | `checkin`, `session_outcome`, `context_update`, `consent`, `welfare`, `wearable`, `system`. |
+| `created_at` | `datetime` | Notification creation timestamp. |
+| `if_read` | `boolean` | Better name: `is_read`. |
+| `read_at` | `datetime nullable` | Read timestamp. |
+| `response_at` | `datetime nullable` | Response timestamp if prompt requires response. |
+
+### AVAILABILITY_EVENT Columns
+
+Operational availability event.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `event_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `team_id` | `int` | FK to `TEAMS.team_id`. |
+| `reported_by` | `int` | FK to `USER.user_id`; coach/staff user. |
+| `session_id` | `int nullable` | Optional FK to `TRAINING_SESSION.session_id`. |
+| `event_type` | `enum` | `available`, `modified_training`, `partial_training`, `missed_session`, `illness`, `injury`, `return_to_play`, `other`. |
+| `event_date` | `datetime` | Event date/time. |
+| `return_date` | `datetime nullable` | Expected or actual return date. |
+| `load_score_context` | `json` | Sanitized snapshot only; no raw sensitive athlete data. |
+| `note` | `text` | Operational note; must avoid raw sensitive details. |
+
 ## Entity Relationships
 
 ### USER
@@ -59,7 +410,7 @@ Relationships:
 | `USER` -> `CYCLE_LOG`                |         1:M | Athlete can have many cycle records.                       |
 | `USER` -> `ATHLETE_SPORT_BACKGROUND` |         1:M | Athlete can have multiple sport backgrounds over time.     |
 | `USER` -> `LOAD_SCORE`               |         1:M | Athlete can have many generated load scores.               |
-| `USER` -> `ATHLETE_CONTEXT_STATE`    |         1:M | Historical/context states over time.                       |
+| `USER` -> `ATHLETE_CONTEXT_STATE`    |      1:0..1 | Current rolling context state for the athlete.             |
 | `USER` -> `TRAINING_SESSION_ATHLETE` |         1:M | Athlete can be attached to many sessions.                  |
 | `USER` -> `SESSION_OUTCOME`          |    indirect | Use `SESSION_OUTCOME -> TRAINING_SESSION_ATHLETE -> USER`. |
 | `USER` -> `WEARABLE_CONNECTION`      |         1:M | Athlete can connect multiple devices.                      |
@@ -328,13 +679,13 @@ Relationships:
 
 | Relationship                               | Cardinality | Notes                                          |
 | ------------------------------------------ | ----------: | ---------------------------------------------- |
-| `USER` -> `ATHLETE_CONTEXT_STATE`          |         1:M | Athlete can have many state records over time. |
-| `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE` |         1:M | State records model version used.              |
+| `USER` -> `ATHLETE_CONTEXT_STATE`          |      1:0..1 | Athlete has at most one current rolling context state, updated over time. |
+| `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE` |         1:M | Many current athlete states can reference the same model version.         |
 
 Recommended indexes:
 
 - PK: `state_id`
-- Index: `user_id`
+- Unique: `user_id`
 - Index: `model_version_id`
 - Index: `(user_id, last_updated)`
 - Index: `(user_id, confidence_state, last_updated)`
@@ -342,6 +693,8 @@ Recommended indexes:
 Implementation note:
 
 Use `model_version_id`, not `model_version`, for consistency with `MODEL_VERSION.version_id`.
+
+If historical snapshots are needed later, add a separate `ATHLETE_CONTEXT_STATE_HISTORY` table rather than storing multiple current-state rows in `ATHLETE_CONTEXT_STATE`.
 
 ### TRAINING_SESSION
 
@@ -597,3 +950,64 @@ Backend services should enforce the following boundaries:
 - Treat green tables as junction / associative entities because they store relationship attributes, not only foreign keys.
 - Do not optimize indexes for coach access to athlete-owned restricted data. Coach workflows should use sanitized output models.
 - Add audit logging to coach-facing access paths, especially when coach-facing views are generated or viewed.
+
+## Agent Implementation Rules
+
+Use these rules when asking Codex, cc, or another agent to generate backend schema, migrations, seed data, API contracts, or model/service code from this document.
+
+### Naming And Schema Style
+
+- Use `snake_case` table and column names in implementation.
+- Prefer explicit names such as `model_version_id`, `created_at`, `submitted_at`, and `is_active`.
+- Avoid mixed casing from the diagram when writing real schema.
+- Use `varchar`/`text` for phone numbers, external IDs, OAuth token hashes, and version tags.
+- Use `datetime` or database-native timestamp types consistently.
+- Use `json` only for intentional snapshot data, such as `AVAILABILITY_EVENT.load_score_context`.
+
+### Relationship Implementation
+
+- Implement normal entity relationships with foreign keys where the relationship is structural.
+- Treat `NOTIFICATION.reference_type` and `NOTIFICATION.reference_id` as a polymorphic reference, not a strict FK.
+- Treat snapshot/provenance references differently from structural FK relationships when documented as such.
+- Keep `ATHLETE_CONTEXT_STATE` as one current row per athlete: `USER 1:0..1 ATHLETE_CONTEXT_STATE`.
+- If historical context snapshots are needed, create `ATHLETE_CONTEXT_STATE_HISTORY` instead of storing multiple current-state rows.
+- Connect `SESSION_OUTCOME` to `TRAINING_SESSION_ATHLETE` through `session_athlete_id`; do not duplicate `user_id` and `session_id` in `SESSION_OUTCOME`.
+
+### Privacy And Access Boundary
+
+- Do not generate coach-facing APIs that read directly from restricted athlete-owned tables.
+- Restricted athlete-owned tables include `ATHLETE_PROFILE`, `ATHLETE_DAILY_CHECKIN`, `CYCLE_LOG`, `WEARABLE_SIGNAL`, `ATHLETE_CONTEXT_STATE`, `WELFARE_FLAG`, and raw `SESSION_OUTCOME`.
+- Coach-facing services should consume sanitized output/read models only.
+- Do not expose raw cycle data, period flags, contraception details, diagnosed conditions, RED-S details, ethnicity, neurodivergent profile, mental readiness raw history, or raw wearable signals to coach-facing APIs.
+- Do not store hidden-but-present sensitive fields in coach-facing response shapes.
+- If a field is not safe for a coach to see, it should not be returned to coach-facing clients at all.
+
+### Consent And Audit
+
+- Consent belongs to the athlete and should be checked before generating or serving coach-facing context.
+- Consent withdrawal must affect the next relevant coach-facing request or generated view.
+- Audit coach-facing access paths, especially access to sanitized athlete context.
+- Audit records should capture actor, target athlete, resource type, resource ID, purpose, consent state at access, access result, and timestamp.
+- Audit logs should not contain raw sensitive values unless explicitly reviewed.
+
+### Index Creation
+
+- Do not blindly create every optional index listed in this document.
+- Create primary keys, foreign keys, and business-critical unique constraints first.
+- Add query-driven indexes only after the API/query pattern is known.
+- Avoid indexes that primarily optimize direct coach access to restricted athlete-owned data.
+- Prefer adding indexes alongside the feature/query that needs them.
+
+### Copy And Product Language
+
+- Do not use schema, API, seed, or response names that imply medical diagnosis, injury prediction, performance prediction, or automated training prescription.
+- Avoid `recommendation` and `override` in AVAIL-owned names.
+- Prefer AVAIL-safe language such as `context`, `load_direction`, `confidence_level`, `different_decision`, and `context_available`.
+- Use `Context unavailable` style semantics for consent-off coach-facing views; do not expose whether an athlete refused or withdrew consent.
+
+### Seed And Mock Data
+
+- Mock and seed data must follow the same privacy boundaries as production data.
+- Do not put raw sensitive athlete values into coach-facing seed objects.
+- Use fictional athletes only.
+- Do not create mock coach APIs that return full athlete profiles and rely on frontend hiding.
