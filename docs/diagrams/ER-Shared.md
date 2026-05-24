@@ -174,11 +174,14 @@ Optional query-driven indexes:
 
 Internal contextual output for an athlete. Coach-facing APIs should consume sanitized outputs, not raw/internal score records directly.
 
+`state_history_id` links each score to the immutable context-state snapshot used at generation time. `ATHLETE_CONTEXT_STATE_HISTORY` is defined in `ER-Athlete.md`.
+
 | Column | Type | Notes |
 | --- | --- | --- |
 | `score_id` | `int` | Primary key. |
 | `user_id` | `int` | FK to `USER.user_id`; athlete user. |
 | `checkin_id` | `int nullable` | Optional reference to athlete check-in. |
+| `state_history_id` | `int` | FK/reference to `ATHLETE_CONTEXT_STATE_HISTORY.state_history_id`; immutable context snapshot used to generate this score. |
 | `version_id` | `int` | FK to `MODEL_VERSION.version_id`. |
 | `score_value` | `int` | 0-100 relative load tolerance estimate. |
 | `confidence_level` | `enum` | `high`, `medium`, `low`, `very_low`. |
@@ -191,6 +194,7 @@ Relationships:
 | Relationship | Cardinality | Notes |
 | --- | ---: | --- |
 | `USER(athlete)` -> `LOAD_SCORE` | 1:M | Athlete can have many load scores. |
+| `ATHLETE_CONTEXT_STATE_HISTORY` -> `LOAD_SCORE` | 1:M | One immutable context snapshot can generate one or more score outputs. |
 | `MODEL_VERSION` -> `LOAD_SCORE` | 1:M | Score records model version used. |
 | `LOAD_SCORE` -> `LOAD_SCORE_GENERATION_LOG` | 1:0..M | Use 1:M if generation attempts are retained. |
 | `LOAD_SCORE` -> `TRAINING_SESSION_ATHLETE` | 1:M | Same score may inform more than one athlete-session. |
@@ -199,12 +203,14 @@ Required constraints / indexes:
 
 - PK: `score_id`
 - FK: `user_id`
+- FK/reference: `state_history_id`
 - FK: `version_id`
 - Check: `score_value` between 0 and 100.
 
 Optional query-driven indexes:
 
 - Index: `checkin_id`
+- Index: `state_history_id`
 - Index: `(user_id, generated_at)`
 - Index: `(user_id, confidence_level, generated_at)`
 
@@ -228,6 +234,8 @@ MODEL_RUN
 | `missing_data_categories` | `text` | Comma-separated or JSON list of missing categories. |
 | `confidence_reason` | `text` | Why the confidence level was assigned. |
 | `generated_at` | `datetime` | Model run timestamp. |
+
+Implementation note: `input_completeness_state` must be an enum, not a boolean, so the model run can distinguish complete, partial, limited, estimated, and unavailable input states.
 
 Relationships:
 
@@ -361,3 +369,5 @@ Optional query-driven indexes:
 - Avoid `recommendation` and `override` in AVAIL-owned schema/API names.
 - Treat snapshot/provenance references differently from structural FK relationships when documented as such.
 - Do not expose raw athlete-owned sensitive inputs through shared operational records.
+- Implement `LOAD_SCORE_GENERATION_LOG.input_completeness_state` as an enum, not a boolean.
+- Implement `LOAD_SCORE.state_history_id` as the reference to the immutable context-state snapshot used to generate the score.

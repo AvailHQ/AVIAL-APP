@@ -41,6 +41,38 @@ Athlete-owned restricted tables include:
 - `WEARABLE_SIGNAL`
 - `WELFARE_FLAG`
 
+## Context State, Score, And Model Run Relationship
+
+The context-state relationship follows the PRD's persistent athlete context model. See `docs/PRD.md`, especially section 13, "Persistent Athlete Context State", which states that the system maintains a continuously updated athlete contextual state and that Load Score is generated from this evolving state rather than isolated daily inputs.
+
+Use the entities this way:
+
+```text
+ATHLETE_CONTEXT_STATE
+= current latest state for an athlete; at most one row per athlete; updated over time.
+
+ATHLETE_CONTEXT_STATE_HISTORY
+= immutable snapshot written whenever the athlete context state is updated.
+
+LOAD_SCORE
+= score/output generated from a specific context-state history snapshot.
+
+LOAD_SCORE_GENERATION_LOG
+= model-run/provenance record for how a score was generated, including input completeness, estimation use, missing data categories, and confidence reason.
+```
+
+Recommended flow:
+
+```text
+check-in / cycle log / wearable signals / session outcome
+  -> update ATHLETE_CONTEXT_STATE
+  -> write ATHLETE_CONTEXT_STATE_HISTORY snapshot
+  -> generate LOAD_SCORE from state_history_id
+  -> write LOAD_SCORE_GENERATION_LOG
+```
+
+This matters because `ATHLETE_CONTEXT_STATE` is mutable. Historical Load Scores need an immutable context basis, otherwise an old score would point at a current-state row whose values have since changed.
+
 ## Diagram Color Categories
 
 | Color  | Meaning                                           |
@@ -170,9 +202,9 @@ This table contains restricted athlete-owned data.
 | `fatigue_level` | `int` | Scale 1-5. |
 | `soreness_level` | `int` | Scale 1-5. |
 | `mental_readiness` | `int` | Scale 1-5; performance framing only. |
-| `period_started` | `boolean` | Athlete tapped period started. |
-| `period_ended` | `boolean` | Athlete tapped period ended. |
 | `submitted_at` | `datetime` | Submission timestamp. |
+
+Period timing is stored in `CYCLE_LOG`, not duplicated on the daily check-in row.
 
 ### ATHLETE_CONTEXT_STATE Columns
 
@@ -190,6 +222,32 @@ Current rolling context state. This table contains restricted inferred context.
 | `cycle_phase_inferred` | `enum` | `menstrual`, `follicular`, `ovulatory`, `luteal`, `suppressed`, `irregular`, `unknown`, `not_applicable`. Restricted; not coach-facing. |
 | `is_conservative_mode` | `boolean` | Whether conservative mode is active. |
 | `last_updated` | `datetime` | Last state update timestamp. |
+
+### ATHLETE_CONTEXT_STATE_HISTORY Columns
+
+Immutable history of athlete context state snapshots. This table contains restricted inferred context and must not be coach-facing.
+
+This entity is important because the PRD defines Load Score as generated from an evolving athlete context state rather than isolated daily inputs (`docs/PRD.md`, section 13, "Persistent Athlete Context State"). Since `ATHLETE_CONTEXT_STATE` stores the current state and is updated over time, this history table preserves the exact context snapshot that a historical `LOAD_SCORE` was based on.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `state_history_id` | `int` | Primary key. |
+| `user_id` | `int` | FK to `USER.user_id`; athlete user. |
+| `source_state_id` | `int` | FK to `ATHLETE_CONTEXT_STATE.state_id`; current-state row this snapshot was written from. |
+| `model_version_id` | `int` | FK to `MODEL_VERSION.version_id`; model/rule version used when producing the snapshot. |
+| `source_checkin_id` | `int nullable` | Optional FK to `ATHLETE_DAILY_CHECKIN.checkin_id` if a check-in contributed to this update. |
+| `source_cycle_id` | `int nullable` | Optional FK to `CYCLE_LOG.cycle_id` if cycle data contributed to this update. |
+| `source_session_outcome_id` | `int nullable` | Optional FK to `SESSION_OUTCOME.outcome_id` if session feedback contributed to this update. |
+| `wearable_window_start` | `datetime nullable` | Start of wearable signal window used for this update, if applicable. |
+| `wearable_window_end` | `datetime nullable` | End of wearable signal window used for this update, if applicable. |
+| `source_summary` | `json nullable` | Minimal provenance summary of source categories used; do not store raw sensitive values unnecessarily. |
+| `rolling_fatigue` | `float` | Snapshot of internal rolling fatigue measure. |
+| `recovery_trend` | `enum` | `improving`, `stable`, `declining`, `insufficient_data`. |
+| `context_stability` | `float` | Snapshot of internal stability score/measure. |
+| `confidence_state` | `enum` | `high`, `medium`, `low`, `very_low`. |
+| `cycle_phase_inferred` | `enum` | `menstrual`, `follicular`, `ovulatory`, `luteal`, `suppressed`, `irregular`, `unknown`, `not_applicable`. Restricted; not coach-facing. |
+| `is_conservative_mode` | `boolean` | Whether conservative mode was active at snapshot time. |
+| `snapshot_at` | `datetime` | Timestamp when the immutable snapshot was written. |
 
 ### SESSION_OUTCOME Columns
 
@@ -304,6 +362,7 @@ Relationships:
 | `USER` -> `ATHLETE_SPORT_BACKGROUND` |         1:M | Athlete can have multiple sport backgrounds over time.     |
 | `USER` -> `LOAD_SCORE`               |         1:M | Athlete can have many generated load scores.               |
 | `USER` -> `ATHLETE_CONTEXT_STATE`    |      1:0..1 | Current rolling context state for the athlete.             |
+| `USER` -> `ATHLETE_CONTEXT_STATE_HISTORY` |      1:M | Athlete can have many immutable context-state snapshots. |
 | `USER` -> `TRAINING_SESSION_ATHLETE` |         1:M | Athlete can be attached to many sessions.                  |
 | `USER` -> `SESSION_OUTCOME`          |    indirect | Use `SESSION_OUTCOME -> TRAINING_SESSION_ATHLETE -> USER`. |
 | `USER` -> `WEARABLE_CONNECTION`      |         1:M | Athlete can connect multiple devices.                      |
@@ -431,6 +490,7 @@ Relationships:
 | -------------------------------------- | ----------: | ------------------------------------------- |
 | `USER` -> `CYCLE_LOG`                  |         1:M | Athlete can have many cycle records.        |
 | `CYCLE_LOG` -> `ATHLETE_DAILY_CHECKIN` |      1:0..M | Check-ins may optionally reference a cycle. |
+| `CYCLE_LOG` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:0..M | Nullable source reference through `source_cycle_id`. |
 
 Recommended indexes:
 
@@ -444,7 +504,7 @@ Recommended indexes:
 
 Athlete-owned restricted daily input table.
 
-This table contains period flags and mental readiness. Coach-facing services must not query it directly.
+This table contains raw daily athlete inputs, including mental readiness. Coach-facing services must not query it directly.
 
 Relationships:
 
@@ -454,6 +514,7 @@ Relationships:
 | `CYCLE_LOG` -> `ATHLETE_DAILY_CHECKIN`       |           1:0..M | `cycle_id` is nullable.                                        |
 | `ATHLETE_DAILY_CHECKIN` -> `LOAD_SCORE`      | 1:0..1 or 1:0..M | MVP should prefer 1:0..1; model logs track generation details. |
 | `ATHLETE_DAILY_CHECKIN` -> `SESSION_OUTCOME` |           1:0..M | `checkin_id` in outcome is nullable.                           |
+| `ATHLETE_DAILY_CHECKIN` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:0..M | `source_checkin_id` is nullable; check-ins may contribute to state updates. |
 
 Recommended indexes:
 
@@ -474,6 +535,7 @@ Relationships:
 | `MODEL_VERSION` -> `LOAD_SCORE`                |         1:M | Many scores can be generated by one model version.    |
 | `MODEL_VERSION` -> `LOAD_SCORE_GENERATION_LOG` |         1:M | Many generation logs can reference one model version. |
 | `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE`     |         1:M | Context states should record model version used.      |
+| `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE_HISTORY` |     1:M | Context-state snapshots should record model/rule version used. |
 
 Shared entity columns and index guidance are maintained in `ER-Shared.md`.
 
@@ -489,6 +551,7 @@ Relationships:
 | ------------------------------------------- | -----------------: | --------------------------------------------------------------------------- |
 | `USER` -> `LOAD_SCORE`                      |                1:M | Athlete can have many load scores.                                          |
 | `ATHLETE_DAILY_CHECKIN` -> `LOAD_SCORE`     |   1:0..1 or 1:0..M | `checkin_id` should be nullable if score can be estimated without check-in. |
+| `ATHLETE_CONTEXT_STATE_HISTORY` -> `LOAD_SCORE` |             1:M | Load Score is generated from an immutable context-state snapshot. |
 | `MODEL_VERSION` -> `LOAD_SCORE`             |                1:M | Score records model version used.                                           |
 | `LOAD_SCORE` -> `LOAD_SCORE_GENERATION_LOG` |      1:0..1 or 1:M | Use 1:M if regeneration attempts are retained.                              |
 | `LOAD_SCORE` -> `TRAINING_SESSION_ATHLETE`  |                1:M | Same score may inform more than one athlete-session.                        |
@@ -527,6 +590,7 @@ Relationships:
 | ------------------------------------------ | ----------: | ---------------------------------------------- |
 | `USER` -> `ATHLETE_CONTEXT_STATE`          |      1:0..1 | Athlete has at most one current rolling context state, updated over time. |
 | `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE` |         1:M | Many current athlete states can reference the same model version.         |
+| `ATHLETE_CONTEXT_STATE` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:M | Each state update should write an immutable history snapshot. |
 
 Recommended indexes:
 
@@ -540,7 +604,41 @@ Implementation note:
 
 Use `model_version_id`, not `model_version`, for consistency with `MODEL_VERSION.version_id`.
 
-If historical snapshots are needed later, add a separate `ATHLETE_CONTEXT_STATE_HISTORY` table rather than storing multiple current-state rows in `ATHLETE_CONTEXT_STATE`.
+Historical snapshots belong in `ATHLETE_CONTEXT_STATE_HISTORY`, not as multiple rows in `ATHLETE_CONTEXT_STATE`.
+
+### ATHLETE_CONTEXT_STATE_HISTORY
+
+Immutable snapshot history for `ATHLETE_CONTEXT_STATE`.
+
+This table exists so historical `LOAD_SCORE` records can reference the exact context basis used at generation time. Without this table, old scores would point to a mutable current-state row whose values may have changed.
+
+Relationships:
+
+| Relationship | Cardinality | Notes |
+| --- | ---: | --- |
+| `USER` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:M | Athlete can have many context-state snapshots. |
+| `ATHLETE_CONTEXT_STATE` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:M | Current-state row can produce many history snapshots over time. |
+| `MODEL_VERSION` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:M | Snapshots record model/rule version used. |
+| `ATHLETE_DAILY_CHECKIN` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:0..M | Nullable source reference through `source_checkin_id`. |
+| `CYCLE_LOG` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:0..M | Nullable source reference through `source_cycle_id`. |
+| `SESSION_OUTCOME` -> `ATHLETE_CONTEXT_STATE_HISTORY` | 1:0..M | Nullable source reference through `source_session_outcome_id`. |
+| `ATHLETE_CONTEXT_STATE_HISTORY` -> `LOAD_SCORE` | 1:M | A snapshot can generate one or more score outputs. |
+
+Recommended indexes:
+
+- PK: `state_history_id`
+- Index: `user_id`
+- Index: `source_state_id`
+- Index: `model_version_id`
+- Index: `source_checkin_id`
+- Index: `source_cycle_id`
+- Index: `source_session_outcome_id`
+- Index: `(user_id, snapshot_at)`
+- Index: `(user_id, confidence_state, snapshot_at)`
+
+Implementation note:
+
+Do not add a single `source_wearable_signal_id` unless the model truly uses one signal row. Context updates usually consume a window of wearable signals, so use `wearable_window_start`, `wearable_window_end`, and `source_summary` for MVP. If exact wearable provenance is required later, add a junction table between `ATHLETE_CONTEXT_STATE_HISTORY` and `WEARABLE_SIGNAL`.
 
 ### TRAINING_SESSION
 
@@ -585,6 +683,7 @@ Relationships:
 | `TRAINING_SESSION_ATHLETE` -> `SESSION_OUTCOME` |             1:0..1 | One outcome per athlete-session.                       |
 | `ATHLETE_DAILY_CHECKIN` -> `SESSION_OUTCOME`    |             1:0..M | Optional connection to same-day check-in.              |
 | `LOAD_SCORE` -> `SESSION_OUTCOME`               | indirect preferred | Use `TRAINING_SESSION_ATHLETE.score_id` when possible. |
+| `SESSION_OUTCOME` -> `ATHLETE_CONTEXT_STATE_HISTORY` |       1:0..M | Nullable source reference through `source_session_outcome_id`. |
 
 Recommended indexes:
 
@@ -748,6 +847,7 @@ Use these constraints in addition to foreign keys:
 - `TRAINING_SESSION_ATHLETE` should be unique on `(session_id, user_id)`.
 - `SESSION_OUTCOME` should be unique on `session_athlete_id`.
 - `ATHLETE_PROFILE.user_id` should be unique.
+- `ATHLETE_CONTEXT_STATE.user_id` should be unique.
 - `WEARABLE_SIGNAL.user_id` must match the user on the referenced `WEARABLE_CONNECTION`.
 
 ## Access Rules
@@ -757,10 +857,11 @@ Backend services should enforce the following boundaries:
 | Data Area               | Coach-facing direct access? | Notes                                                                      |
 | ----------------------- | --------------------------: | -------------------------------------------------------------------------- |
 | `ATHLETE_PROFILE`       |                          No | Sensitive onboarding data.                                                 |
-| `ATHLETE_DAILY_CHECKIN` |                          No | Raw mental readiness and period flags.                                     |
+| `ATHLETE_DAILY_CHECKIN` |                          No | Raw mental readiness and daily self-report values.                         |
 | `CYCLE_LOG`             |                          No | Raw cycle data.                                                            |
 | `WEARABLE_SIGNAL`       |                          No | Raw wearable signals.                                                      |
 | `ATHLETE_CONTEXT_STATE` |                          No | Contains inferred sensitive state.                                         |
+| `ATHLETE_CONTEXT_STATE_HISTORY` |                   No | Contains immutable inferred context snapshots.                             |
 | `WELFARE_FLAG`          |                          No | Restricted welfare data.                                                   |
 | `LOAD_SCORE`            |               Internal only | Coach should receive sanitized derived fields through coach-facing output. |
 | `SESSION_OUTCOME`       |        No direct raw access | Use only sanitized summaries where appropriate.                            |
@@ -793,13 +894,14 @@ Use these rules when asking Codex, cc, or another agent to generate backend sche
 - Treat `NOTIFICATION.reference_type` and `NOTIFICATION.reference_id` as a polymorphic reference, not a strict FK.
 - Treat snapshot/provenance references differently from structural FK relationships when documented as such.
 - Keep `ATHLETE_CONTEXT_STATE` as one current row per athlete: `USER 1:0..1 ATHLETE_CONTEXT_STATE`.
-- If historical context snapshots are needed, create `ATHLETE_CONTEXT_STATE_HISTORY` instead of storing multiple current-state rows.
+- Store historical context snapshots in `ATHLETE_CONTEXT_STATE_HISTORY`; do not store multiple current-state rows in `ATHLETE_CONTEXT_STATE`.
+- Generate `LOAD_SCORE` from `ATHLETE_CONTEXT_STATE_HISTORY.state_history_id`, not directly from the mutable current-state row.
 - Connect `SESSION_OUTCOME` to `TRAINING_SESSION_ATHLETE` through `session_athlete_id`; do not duplicate `user_id` and `session_id` in `SESSION_OUTCOME`.
 
 ### Privacy And Access Boundary
 
 - Do not generate coach-facing APIs that read directly from restricted athlete-owned tables.
-- Restricted athlete-owned tables include `ATHLETE_PROFILE`, `ATHLETE_DAILY_CHECKIN`, `CYCLE_LOG`, `WEARABLE_SIGNAL`, `ATHLETE_CONTEXT_STATE`, `WELFARE_FLAG`, and raw `SESSION_OUTCOME`.
+- Restricted athlete-owned tables include `ATHLETE_PROFILE`, `ATHLETE_DAILY_CHECKIN`, `CYCLE_LOG`, `WEARABLE_SIGNAL`, `ATHLETE_CONTEXT_STATE`, `ATHLETE_CONTEXT_STATE_HISTORY`, `WELFARE_FLAG`, and raw `SESSION_OUTCOME`.
 - Coach-facing services should consume sanitized output/read models only.
 - Do not expose raw cycle data, period flags, contraception details, diagnosed conditions, RED-S details, ethnicity, neurodivergent profile, mental readiness raw history, or raw wearable signals to coach-facing APIs.
 - Do not store hidden-but-present sensitive fields in coach-facing response shapes.

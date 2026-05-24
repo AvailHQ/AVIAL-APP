@@ -128,7 +128,7 @@ Optional query-driven indexes:
 
 Implementation notes:
 
-- `COACH_VIEW` must not contain raw cycle logs, period flags, raw check-in values, contraception details, diagnosed conditions, RED-S details, ethnicity, neurodivergent profile, raw wearable signals, or welfare trigger details.
+- `COACH_VIEW` must not contain raw cycle logs, raw period/cycle data, raw check-in values, contraception details, diagnosed conditions, RED-S details, ethnicity, neurodivergent profile, raw wearable signals, or welfare trigger details.
 - If consent is withdrawn, the next coach-facing generation/request should produce `context_available = false` or no accessible context, depending on API design.
 - Use neutral coach-facing unavailable language such as `Context unavailable`.
 
