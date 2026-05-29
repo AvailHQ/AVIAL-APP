@@ -264,6 +264,13 @@ Acceptance criteria:
 - Sensitive fields are not casually joined into coach views
 - Seed data respects privacy rules
 
+Optional tooling after initial backend implementation:
+
+- Consider enabling `Lum1104/Understand-Anything` locally once the first backend/API/schema implementation exists.
+- Use it for codebase understanding, architecture navigation, onboarding, and impact analysis only.
+- Do not treat generated knowledge graphs as the source of truth; AVAIL docs and schema files remain authoritative.
+- Do not auto-commit generated `.understand-anything/` artifacts unless explicitly reviewed and approved.
+
 Recommended review skill:
 
 - `avail-data-privacy-architect`

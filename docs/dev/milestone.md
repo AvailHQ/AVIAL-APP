@@ -224,6 +224,13 @@ Acceptance criteria:
 - Audit logs avoid raw sensitive values
 - Sensitive fields are not casually joined into coach views
 
+Optional tooling after initial backend implementation:
+
+- Consider enabling `Lum1104/Understand-Anything` locally once the first backend/API/schema implementation exists.
+- Use it for codebase understanding, architecture navigation, onboarding, and impact analysis only.
+- Do not treat generated knowledge graphs as the source of truth; AVAIL docs and schema files remain authoritative.
+- Do not auto-commit generated `.understand-anything/` artifacts unless explicitly reviewed and approved.
+
 ## Milestone 7 - MVP Load Score And Confidence Logic
 
 Status: planned
