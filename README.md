@@ -45,6 +45,51 @@ AVIAL-APP/
 
 AVAIL development is staged. Do not jump straight to backend, model logic, or real athlete data before the earlier guardrails are in place.
 
+Before Codex, cc, or any other AI agent starts project work, read the most recent entries in:
+
+```text
+docs/dev/development_log.md
+```
+
+The log is intentionally brief and commit-message-like. Use it to understand recent project actions before making changes or recommendations.
+
+After reading the recent log entries, do a lightweight handoff check:
+
+- Check whether the logged work appears complete in the repository.
+- Note any obvious missing follow-ups, contradictions, or incomplete actions.
+- Then proceed with the requested task.
+
+This is a recent-log check, not a full project audit.
+
+AVAIL uses lightweight agile delivery with milestone gates. Work should be split into small tickets rather than broad open-ended tasks.
+
+A ticket is a small task that can be assigned, implemented, reviewed, and accepted. A ticket may be a feature, bug fix, documentation task, design decision, Supabase schema slice, or review task.
+
+Good AVAIL tickets should state:
+
+- Who the work is for
+- What capability or artifact is needed
+- Why it matters
+- What counts as done
+- Which privacy, consent, copy, and confidence checks apply
+
+Example ticket:
+
+```text
+Ticket: Coach squad context list
+
+As a coach,
+I want to view a squad context list,
+so that I can prepare for a session using structured physiological context.
+
+Acceptance criteria:
+- Coach UI only receives sanitized CoachAthleteView data.
+- Consent-off athlete shows Context unavailable.
+- No raw check-in, cycle, wearable, profile, or welfare data appears.
+- Confidence is visible for every available context state.
+- Build passes.
+```
+
 ```text
 0. Guardrails
    ↓
@@ -102,6 +147,11 @@ The prototype exists and builds, but it still needs review fixes and hardening b
   - `docs/dev/agent_skill_usage.md`
   - `docs/dev/skill_roadmap.md`
 - Milestone roadmap exists: `docs/dev/milestone.md`
+- Agile, workflow, testing, and development log docs exist:
+  - `docs/dev/agile_delivery_rules.md`
+  - `docs/dev/workflow_ci_cd_rules.md`
+  - `docs/dev/testing_rules.md`
+  - `docs/dev/development_log.md`
 - Pure frontend prototype exists in `avail-prototype/`
 - Prototype build passes with `npm.cmd run build`
 - `.gitignore` excludes `node_modules/`, `dist/`, `.claude/`, logs, and local env files
@@ -178,19 +228,31 @@ Start here:
 7. `docs/dev/milestone.md`  
    Development roadmap from prototype to pilot deployment.
 
-8. `docs/dev/agent_skill_usage.md`  
+8. `docs/dev/agile_delivery_rules.md`  
+   Lightweight agile delivery rules, sprint gates, ticket format, and Supabase pilot iteration rules.
+
+9. `docs/dev/workflow_ci_cd_rules.md`  
+   Standard ticket-to-merge workflow, GitHub Actions, Playwright scope, staging, and deployment rules.
+
+10. `docs/dev/testing_rules.md`  
+   Testing strategy for build/typecheck, unit tests, privacy transforms, Playwright smoke tests, copy audit, and Supabase/RLS tests.
+
+11. `docs/dev/development_log.md`  
+   One-line development log for human, Codex, cc, and other AI project actions. Read recent entries before starting work.
+
+12. `docs/dev/agent_skill_usage.md`  
    How to ask Codex to use installed skills during review.
 
-9. `docs/dev/skill_roadmap.md`  
+13. `docs/dev/skill_roadmap.md`  
    Completed and planned Codex skills for AVAIL development.
 
-10. `docs/diagrams/ER-Shared.md`  
+14. `docs/diagrams/ER-Shared.md`  
     Shared backend schema reference for entities used by both athlete-side and coach-side ER diagrams.
 
-11. `docs/diagrams/ER-Athlete.md`  
+15. `docs/diagrams/ER-Athlete.md`  
     Athlete-perspective ER diagram notes, restricted athlete-owned data boundaries, relationships, columns, enum suggestions, and implementation rules.
 
-12. `docs/diagrams/ER-Coach.md`  
+16. `docs/diagrams/ER-Coach.md`  
     Coach-perspective ER diagram notes for sanitized coach views, different-decision logging, audit logging, and coach-facing access boundaries.
 
 ## First-Time Setup

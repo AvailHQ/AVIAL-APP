@@ -13,10 +13,27 @@ After installing new skills, restart Codex before expecting them to appear in th
 
 ## General Rule
 
+Before Codex, cc, or any other AI agent starts AVAIL project work, read the most recent entries in:
+
+```text
+docs/dev/development_log.md
+```
+
+Use the log to understand recent project actions. Keep new entries concise and one-line, similar to Git commit messages.
+
+After reading recent log entries, do a lightweight handoff check:
+
+- Check whether the logged work appears complete in the repository.
+- Note any obvious missing follow-ups, contradictions, or incomplete actions.
+- Then proceed with the requested task.
+
+This is a recent-log check, not a full project audit.
+
 Use these skills as review and implementation aids. They do not replace AVAIL-specific rules.
 
 AVAIL-specific docs always remain the source of truth:
 
+- `docs/dev/development_log.md`
 - `docs/dev/product_boundaries.md`
 - `docs/dev/data_privacy_rules.md`
 - `docs/dev/copy_language_rules.md`
