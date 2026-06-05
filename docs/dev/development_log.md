@@ -18,3 +18,5 @@ This is a recent-log check, not a full project audit.
 - 2026-06-04 Human: Require a concise one-line development log for human, Codex, cc, and other AI actions.
 - 2026-06-04 Human: Require AI agents to do a lightweight handoff check from recent log entries before starting new tasks.
 - 2026-06-05 Codex: Add testing rules v1 for prototype, Playwright, privacy, copy, and Supabase/RLS checks.
+- 2026-06-05 cc: Standardise npm commands for cross-platform team; add .nvmrc (Node 20); update README, workflow, testing, and milestone docs.
+- 2026-06-05 cc: Add .github/workflows/ci.yml — runs npm ci and npm run build on every push and PR.
