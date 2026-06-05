@@ -65,7 +65,7 @@ Required screens:
 
 Acceptance criteria:
 
-- `npm.cmd run build` passes
+- `npm run build` passes
 - Prototype runs locally
 - Coach views receive sanitized `CoachAthleteView` data only
 - Consent-off athlete shows neutral `Context unavailable`
