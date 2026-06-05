@@ -1,7 +1,8 @@
-import { tokens, directionColors, confidenceColor, trendColor } from '../../tokens';
+import { tokens, directionColors } from '../../tokens';
 import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
 import { DirectionBadge, ConfidenceBadge, TrendBadge } from '../shared/Badge';
+import Avatar from '../shared/Avatar';
 
 interface Props {
   athlete: CoachAthleteView;
@@ -117,19 +118,13 @@ export default function AthleteCard({ athlete, onClick }: Props) {
           score={hasScore ? athlete.loadScore : null}
           direction={athlete.direction}
         />
-        <div style={{
-          position: 'absolute',
-          top: 6, left: 6,
-          width: 60, height: 60,
-          borderRadius: '50%',
-          background: isUnavailable
-            ? 'rgba(154,163,173,0.15)'
-            : 'linear-gradient(135deg, #3D9B6B, #4FA3C7)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: isUnavailable ? tokens.color.unavailable : '#fff',
-          fontSize: '18px', fontWeight: tokens.font.bold,
-        }}>
-          {athlete.avatarInitials}
+        <div style={{ position: 'absolute', top: 6, left: 6 }}>
+          <Avatar
+            initials={athlete.avatarInitials}
+            avatarPosition={athlete.avatarPosition}
+            size={60}
+            unavailable={isUnavailable}
+          />
         </div>
       </div>
 

@@ -27,3 +27,4 @@ This is a recent-log check, not a full project audit.
 - 2026-06-05 cc: Fix all P3 review findings — crypto.randomUUID() replaces Math.random(), hover effects converted to state-based in AthleteListRow/CoachAthleteDetail/DifferentDecisionFlow.
 - 2026-06-05 cc: Redesign coach dashboard — add metric cards, Squad Load Overview chart, and card/list toggle view with AthleteCard component.
 - 2026-06-05 cc: Add CLAUDE.md — commands, source structure, privacy firewall, product boundaries, copy rules, naming conventions.
+- 2026-06-05 cc: Add Avatar component with squad.jpg sprite support; update all avatar rendering across Login, coach components, and dashboard.

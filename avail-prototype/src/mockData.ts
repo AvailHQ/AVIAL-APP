@@ -11,6 +11,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Midfielder',
     avatarInitials: 'MC',
+    avatarPosition: '100% 0%',   // top-right
     cycleRegularity: 'Regular',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -22,6 +23,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Forward',
     avatarInitials: 'SR',
+    avatarPosition: '0% 100%',   // bottom-left
     cycleRegularity: 'Irregular',
     trainingBackground: 'Elite',
     sleepVariability: 'Moderate',
@@ -33,6 +35,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Defender',
     avatarInitials: 'PS',
+    avatarPosition: '50% 100%',  // bottom-center
     cycleRegularity: 'Regular',
     trainingBackground: 'Semi-Pro',
     sleepVariability: 'Moderate',
@@ -44,6 +47,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Goalkeeper',
     avatarInitials: 'ET',
+    avatarPosition: '0% 0%',     // top-left
     cycleRegularity: 'Regular',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -55,6 +59,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Midfielder',
     avatarInitials: 'AO',
+    avatarPosition: '50% 0%',    // top-center
     cycleRegularity: 'Regular',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -66,6 +71,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Defender',
     avatarInitials: 'ZM',
+    avatarPosition: '100% 100%', // bottom-right
     cycleRegularity: 'HormonalContraception',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -77,6 +83,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Forward',
     avatarInitials: 'CW',
+    // no avatarPosition — uses initials fallback
     cycleRegularity: 'Regular',
     trainingBackground: 'Semi-Pro',
     sleepVariability: 'High',

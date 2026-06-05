@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { tokens, directionColors } from '../../tokens';
+import Avatar from '../shared/Avatar';
 import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
 import PageWrapper from '../shared/PageWrapper';
@@ -84,17 +85,12 @@ function SquadOverviewRow({ athlete }: OverviewRowProps) {
       borderBottom: `1px solid rgba(0,0,0,0.04)`,
     }}>
       {/* Avatar */}
-      <div style={{
-        width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
-        background: isUnavailable
-          ? 'rgba(154,163,173,0.15)'
-          : 'linear-gradient(135deg, #3D9B6B, #4FA3C7)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: isUnavailable ? tokens.color.unavailable : '#fff',
-        fontSize: tokens.font.xs, fontWeight: tokens.font.bold,
-      }}>
-        {athlete.avatarInitials}
-      </div>
+      <Avatar
+        initials={athlete.avatarInitials}
+        avatarPosition={athlete.avatarPosition}
+        size={28}
+        unavailable={isUnavailable}
+      />
 
       {/* Name */}
       <div style={{

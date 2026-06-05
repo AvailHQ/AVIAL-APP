@@ -4,6 +4,7 @@ import { tokens, directionColors } from '../../tokens';
 import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
 import { ConfidenceBadge, TrendBadge } from '../shared/Badge';
+import Avatar from '../shared/Avatar';
 
 interface Props {
   athlete: CoachAthleteView;
@@ -47,17 +48,12 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
       }}
     >
       {/* Avatar */}
-      <div style={{
-        width: 36, height: 36, borderRadius: '50%',
-        background: athlete.contextUnavailable
-          ? 'rgba(154,163,173,0.15)'
-          : 'linear-gradient(135deg, #3D9B6B, #4FA3C7)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: athlete.contextUnavailable ? tokens.color.unavailable : '#fff',
-        fontSize: '12px', fontWeight: tokens.font.bold, flexShrink: 0,
-      }}>
-        {athlete.avatarInitials}
-      </div>
+      <Avatar
+        initials={athlete.avatarInitials}
+        avatarPosition={athlete.avatarPosition}
+        size={36}
+        unavailable={athlete.contextUnavailable}
+      />
 
       {/* Name + position */}
       <div style={{ flex: 1, minWidth: 0 }}>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
+import Avatar from '../shared/Avatar';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
 import type { CoachAthleteView, DifferentDecision } from '../../types';
@@ -44,15 +45,12 @@ export default function CoachAthleteDetail({ athlete, differentDecisions, onDiff
 
       {/* Athlete header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.md, marginBottom: tokens.space['2xl'] }}>
-        <div style={{
-          width: 48, height: 48, borderRadius: '50%',
-          background: athlete.contextUnavailable ? 'rgba(154,163,173,0.15)' : 'linear-gradient(135deg, #3D9B6B, #4FA3C7)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: athlete.contextUnavailable ? tokens.color.unavailable : '#fff',
-          fontSize: '15px', fontWeight: tokens.font.bold, flexShrink: 0,
-        }}>
-          {athlete.avatarInitials}
-        </div>
+        <Avatar
+          initials={athlete.avatarInitials}
+          avatarPosition={athlete.avatarPosition}
+          size={48}
+          unavailable={athlete.contextUnavailable}
+        />
         <div>
           <div style={{ fontSize: '20px', fontWeight: tokens.font.bold, color: tokens.color.textPrimary }}>{athlete.name}</div>
           <div style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>{athlete.sport} · {athlete.position}</div>

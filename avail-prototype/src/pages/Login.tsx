@@ -4,6 +4,7 @@ import { tokens } from '../tokens';
 import { S } from '../strings';
 import type { AthleteProfile } from '../types';
 import Card from '../components/shared/Card';
+import Avatar from '../components/shared/Avatar';
 
 interface Props {
   athletes: AthleteProfile[];
@@ -71,15 +72,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                 onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 2px rgba(79,163,199,0.4)'; }}
                 onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
               >
-                <div style={{
-                  width: 36, height: 36, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #3D9B6B, #4FA3C7)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', fontSize: tokens.font.sm, fontWeight: tokens.font.bold,
-                  flexShrink: 0,
-                }}>
-                  {active.avatarInitials}
-                </div>
+                <Avatar initials={active.avatarInitials} avatarPosition={active.avatarPosition} size={36} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: tokens.font.md, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary }}>{active.name}</div>
                   <div style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>{active.sport} · {active.position}</div>
@@ -115,15 +108,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                       onFocus={e => { e.currentTarget.style.background = 'rgba(61,155,107,0.06)'; }}
                       onBlur={e => { e.currentTarget.style.background = a.id === selectedAthlete ? 'rgba(61,155,107,0.06)' : 'transparent'; }}
                     >
-                      <div style={{
-                        width: 30, height: 30, borderRadius: '50%',
-                        background: a.id === selectedAthlete ? 'linear-gradient(135deg, #3D9B6B, #4FA3C7)' : 'rgba(0,0,0,0.08)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: a.id === selectedAthlete ? '#fff' : tokens.color.textSecondary,
-                        fontSize: '11px', fontWeight: tokens.font.bold, flexShrink: 0,
-                      }}>
-                        {a.avatarInitials}
-                      </div>
+                      <Avatar initials={a.avatarInitials} avatarPosition={a.avatarPosition} size={30} />
                       <div>
                         <div style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.medium, color: tokens.color.textPrimary }}>{a.name}</div>
                         <div style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted }}>{a.position}</div>
