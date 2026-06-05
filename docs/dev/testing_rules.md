@@ -66,10 +66,12 @@ Use test layers for different risks:
 
 For the current prototype, the minimum local check is:
 
-```powershell
+```bash
 cd avail-prototype
-npm.cmd run build
+npm run build
 ```
+
+On Windows PowerShell, replace `npm` with `npm.cmd` if execution policy blocks `npm.ps1`. Prefer Git Bash or WSL on Windows to keep commands consistent with CI.
 
 Build must pass before meaningful review or merge.
 
