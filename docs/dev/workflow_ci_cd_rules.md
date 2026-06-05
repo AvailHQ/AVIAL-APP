@@ -73,20 +73,32 @@ Run local checks before asking Codex, CC, or another reviewer to inspect the wor
 
 For the current prototype:
 
-```powershell
+```bash
 cd avail-prototype
-npm.cmd run build
+npm run build
 ```
 
 When tests are added, local checks should expand to:
 
-```powershell
-npm.cmd run build
-npm.cmd run test
-npm.cmd run test:e2e
+```bash
+npm run build
+npm run test
+npm run test:e2e
 ```
 
-Use `npm.cmd` on this Windows machine unless the shell is configured to allow `npm`.
+### Shell Differences By Platform
+
+| Platform | Recommended shell | npm command |
+| --- | --- | --- |
+| macOS / Linux | Terminal, zsh, bash | `npm` |
+| Windows (Git Bash or WSL) | Git Bash or WSL | `npm` |
+| Windows (PowerShell) | PowerShell | `npm.cmd` if `npm.ps1` is blocked by execution policy |
+
+**Recommended for Windows developers:** use Git Bash or WSL so that `npm` works without modification and commands match CI exactly.
+
+If you must use PowerShell and `npm` is blocked, replace `npm` with `npm.cmd` locally. Do not use `npm.cmd` in scripts committed to the repo or in CI configuration.
+
+CI always uses standard `npm` on Linux runners.
 
 ## Codex And CC Review
 
