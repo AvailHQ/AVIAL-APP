@@ -1,0 +1,73 @@
+import { Icon } from '@iconify/react';
+import { tokens } from '../../../tokens';
+import { S } from '../../../strings';
+import type { OnboardingData } from './OnboardingTypes';
+import Card from '../../shared/Card';
+
+interface Props {
+  data: OnboardingData;
+  onComplete: () => void;
+}
+
+export default function OnboardingConfirm({ data, onComplete }: Props) {
+  const cycleDisplay =
+    data.cycleRegularity === 'HormonalContraception' ? 'Hormonal contraception' :
+    data.cycleRegularity === 'PreferNotToSay' ? 'Not shared' :
+    data.cycleRegularity ?? '—';
+
+  const summaryRows = [
+    { icon: 'ph:calendar', label: 'Cycle context', value: cycleDisplay },
+    { icon: 'ph:barbell', label: 'Training level', value: data.trainingLevel ?? '—' },
+    { icon: 'ph:moon', label: 'Sleep pattern', value: data.sleepConsistency ?? '—' },
+  ];
+
+  return (
+    <div>
+      <div style={{ fontSize: '22px', fontWeight: tokens.font.bold, color: tokens.color.textPrimary, marginBottom: tokens.space.sm }}>
+        {S.onboardingConfirmHeading}
+      </div>
+      <div style={{ fontSize: tokens.font.md, color: tokens.color.textSecondary, marginBottom: tokens.space['2xl'], lineHeight: '1.5' }}>
+        {S.onboardingConfirmBody}
+      </div>
+
+      <Card style={{ marginBottom: tokens.space.lg }} padding={tokens.space.lg}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.space.md }}>
+          {summaryRows.map(row => (
+            <div key={row.label} style={{ display: 'flex', alignItems: 'center', gap: tokens.space.md }}>
+              <Icon icon={row.icon} width={18} color={tokens.color.greenAccent} />
+              <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary, flex: 1 }}>{row.label}</span>
+              <span style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <div style={{
+        display: 'flex', gap: tokens.space.sm, alignItems: 'flex-start',
+        padding: tokens.space.md,
+        background: 'rgba(61,155,107,0.06)',
+        borderRadius: tokens.radius.md,
+        marginBottom: tokens.space['2xl'],
+      }}>
+        <Icon icon="ph:lock-simple" width={16} color={tokens.color.statusMaintain} style={{ marginTop: '2px', flexShrink: 0 }} />
+        <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary, lineHeight: '1.5' }}>
+          {S.onboardingPrivacyNote}
+        </span>
+      </div>
+
+      <button
+        onClick={onComplete}
+        style={{
+          width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
+          background: 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)',
+          border: 'none', borderRadius: tokens.radius.full,
+          color: '#fff', fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
+          cursor: 'pointer', fontFamily: tokens.font.family,
+          boxShadow: '0 2px 12px rgba(61,155,107,0.22)',
+        }}
+      >
+        {S.onboardingComplete}
+      </button>
+    </div>
+  );
+}

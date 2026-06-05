@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { AppState, AppView, DailyCheckIn as DailyCheckInData, ConsentState, SessionOutcome, DifferentDecision } from './types';
-import { ATHLETES, LOAD_SCORES, INITIAL_CONSENT, buildCoachView, COACH_DASHBOARD_ORDER } from './mockData';
+import { ATHLETES, LOAD_SCORES, INITIAL_CONSENT, COACH_DASHBOARD_ORDER } from './mockData';
+import { buildCoachView } from './utils/coachView';
 import { tokens } from './tokens';
 import { S } from './strings';
 
-import RoleSelect from './components/RoleSelect';
+import Login from './pages/Login';
 import OnboardingFlow from './components/athlete/OnboardingFlow';
 import AthleteDashboard from './components/athlete/AthleteDashboard';
 import DailyCheckIn from './components/athlete/DailyCheckIn';
@@ -113,13 +114,19 @@ export default function App() {
   const activeLoadScore = state.loadScores[activeAthleteId];
   const activeConsent = state.consent[activeAthleteId];
 
-  const coachViews = COACH_DASHBOARD_ORDER.map(id =>
-    buildCoachView(id, state.consent, state.loadScores, state.athletes)
+  const coachViews = useMemo(
+    () => COACH_DASHBOARD_ORDER.map(id =>
+      buildCoachView(id, state.consent, state.loadScores, state.athletes)
+    ),
+    [state.consent, state.loadScores, state.athletes]
   );
 
-  const selectedCoachView = selectedCoachAthleteId
-    ? buildCoachView(selectedCoachAthleteId, state.consent, state.loadScores, state.athletes)
-    : null;
+  const selectedCoachView = useMemo(
+    () => selectedCoachAthleteId
+      ? buildCoachView(selectedCoachAthleteId, state.consent, state.loadScores, state.athletes)
+      : null,
+    [selectedCoachAthleteId, state.consent, state.loadScores, state.athletes]
+  );
 
   const athleteDecisions = selectedCoachAthleteId
     ? state.differentDecisions.filter(d => d.athleteId === selectedCoachAthleteId)
@@ -128,7 +135,7 @@ export default function App() {
   return (
     <div style={appStyle}>
       {currentView === 'role-select' && (
-        <RoleSelect
+        <Login
           athletes={state.athletes}
           activeAthleteId={activeAthleteId}
           onAthleteSelect={handleAthleteLogin}

@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { tokens, directionColors, confidenceColor, trendColor } from '../../tokens';
+import { tokens, directionColors } from '../../tokens';
+import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
+import { ConfidenceBadge, TrendBadge } from '../shared/Badge';
 
 interface Props {
   athlete: CoachAthleteView;
@@ -9,29 +12,38 @@ interface Props {
 
 export default function AthleteListRow({ athlete, onClick }: Props) {
   const { text: dirColor } = directionColors(athlete.direction);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  const boxShadow = focused
+    ? '0 0 0 2px rgba(79,163,199,0.5)'
+    : hovered
+    ? '0 2px 12px rgba(0,0,0,0.05)'
+    : 'none';
 
   return (
-    <div
+    <button
       onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: tokens.space.md,
         padding: `${tokens.space.md} ${tokens.space.lg}`,
-        background: 'rgba(255,255,255,0.60)',
+        background: hovered ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.60)',
         borderRadius: tokens.radius.md,
         border: '1px solid rgba(255,255,255,0.4)',
         cursor: 'pointer',
         transition: 'background 0.15s, box-shadow 0.15s',
         marginBottom: tokens.space.sm,
-      }}
-      onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.82)';
-        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)';
-      }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.60)';
-        (e.currentTarget as HTMLDivElement).style.boxShadow = '';
+        width: '100%',
+        textAlign: 'left',
+        fontFamily: tokens.font.family,
+        outline: 'none',
+        boxShadow,
       }}
     >
       {/* Avatar */}
@@ -116,36 +128,19 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
             background: directionColors(athlete.direction).bg,
             whiteSpace: 'nowrap',
           }}>
-            {athlete.direction}
+            {S.directionLabel(athlete.direction)}
           </span>
 
           {/* Confidence */}
-          <span style={{
-            padding: '3px 8px',
-            borderRadius: tokens.radius.full,
-            fontSize: tokens.font.xs,
-            color: confidenceColor(athlete.confidence),
-            background: confidenceColor(athlete.confidence) + '18',
-            whiteSpace: 'nowrap',
-          }}>
-            {athlete.confidence}
-          </span>
+          <ConfidenceBadge confidence={athlete.confidence} size="sm" />
 
           {/* Trend */}
-          <span style={{
-            display: 'flex', alignItems: 'center', gap: '3px',
-            fontSize: tokens.font.xs,
-            color: trendColor(athlete.trend),
-            whiteSpace: 'nowrap',
-          }}>
-            {athlete.trend === 'Improving' ? <Icon icon="ph:arrow-up" width={10} /> : athlete.trend === 'Declining' ? <Icon icon="ph:arrow-down" width={10} /> : <Icon icon="ph:minus" width={10} />}
-            {athlete.trend}
-          </span>
+          <TrendBadge trend={athlete.trend} size="sm" />
         </div>
       )}
 
       {/* Chevron */}
       <Icon icon="ph:caret-right" width={14} color={tokens.color.textMuted} style={{ flexShrink: 0 }} />
-    </div>
+    </button>
   );
 }

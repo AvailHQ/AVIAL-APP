@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { tokens } from '../tokens';
 import { S } from '../strings';
 import type { AthleteProfile } from '../types';
-import Card from './shared/Card';
+import Card from '../components/shared/Card';
 
 interface Props {
   athletes: AthleteProfile[];
@@ -52,7 +52,8 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
               <div style={{ fontSize: tokens.font.sm, color: tokens.color.textMuted, fontWeight: tokens.font.medium, marginBottom: tokens.space.sm, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 Athlete
               </div>
-              <div
+              <button
+                onClick={() => setShowAthleteList(!showAthleteList)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -62,8 +63,13 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                   borderRadius: tokens.radius.md,
                   cursor: 'pointer',
                   border: '1px solid rgba(0,0,0,0.06)',
+                  width: '100%',
+                  textAlign: 'left',
+                  fontFamily: tokens.font.family,
+                  outline: 'none',
                 }}
-                onClick={() => setShowAthleteList(!showAthleteList)}
+                onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 2px rgba(79,163,199,0.4)'; }}
+                onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
               >
                 <div style={{
                   width: 36, height: 36, borderRadius: '50%',
@@ -79,7 +85,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                   <div style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>{active.sport} · {active.position}</div>
                 </div>
                 <Icon icon="ph:caret-down" width={16} height={16} color={tokens.color.textMuted} style={{ transform: showAthleteList ? 'rotate(180deg)' : '', transition: 'transform 0.2s' }} />
-              </div>
+              </button>
 
               {showAthleteList && (
                 <div style={{
@@ -90,7 +96,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                   background: 'rgba(255,255,255,0.9)',
                 }}>
                   {athletes.map(a => (
-                    <div
+                    <button
                       key={a.id}
                       onClick={() => { setSelectedAthlete(a.id); setShowAthleteList(false); }}
                       style={{
@@ -98,9 +104,16 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                         padding: `${tokens.space.sm} ${tokens.space.md}`,
                         cursor: 'pointer',
                         background: a.id === selectedAthlete ? 'rgba(61,155,107,0.06)' : 'transparent',
+                        border: 'none',
                         borderBottom: '1px solid rgba(0,0,0,0.04)',
                         transition: 'background 0.15s',
+                        width: '100%',
+                        textAlign: 'left',
+                        fontFamily: tokens.font.family,
+                        outline: 'none',
                       }}
+                      onFocus={e => { e.currentTarget.style.background = 'rgba(61,155,107,0.06)'; }}
+                      onBlur={e => { e.currentTarget.style.background = a.id === selectedAthlete ? 'rgba(61,155,107,0.06)' : 'transparent'; }}
                     >
                       <div style={{
                         width: 30, height: 30, borderRadius: '50%',
@@ -116,7 +129,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                         <div style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted }}>{a.position}</div>
                       </div>
                       {a.id === selectedAthlete && <Icon icon="ph:check" width={14} color={tokens.color.statusMaintain} style={{ marginLeft: 'auto' }} />}
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}

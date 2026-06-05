@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
@@ -6,9 +7,9 @@ import PageWrapper from '../shared/PageWrapper';
 import BackButton from '../shared/BackButton';
 import Card from '../shared/Card';
 import { DirectionBadge, ConfidenceBadge, TrendBadge } from '../shared/Badge';
-import LoadScoreRing from '../athlete/LoadScoreRing';
-import TrendChart from '../athlete/TrendChart';
-import ContextDimensionsPanel from '../athlete/ContextDimensionsPanel';
+import LoadScoreRing from '../shared/LoadScoreRing';
+import TrendChart from '../shared/TrendChart';
+import ContextDimensionsPanel from '../shared/ContextDimensionsPanel';
 
 interface Props {
   athlete: CoachAthleteView;
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export default function CoachAthleteDetail({ athlete, differentDecisions, onDifferentDecision, onBack }: Props) {
+  const [decisionHovered, setDecisionHovered] = useState(false);
+
   return (
     <PageWrapper maxWidth="560px" paddingBottom="80px">
       <div style={{ marginBottom: tokens.space.lg }}>
@@ -132,7 +135,7 @@ export default function CoachAthleteDetail({ athlete, differentDecisions, onDiff
             <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.sm, marginBottom: tokens.space.md }}>
               <Icon icon="ph:chart-line" width={15} color={tokens.color.textSecondary} />
               <span style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary }}>
-                7-day pattern
+                {S.coachTrendLabel}
               </span>
               <TrendBadge trend={athlete.trend} size="sm" />
             </div>
@@ -171,21 +174,18 @@ export default function CoachAthleteDetail({ athlete, differentDecisions, onDiff
           {/* I'm making a different decision CTA */}
           <button
             onClick={onDifferentDecision}
+            onMouseEnter={() => setDecisionHovered(true)}
+            onMouseLeave={() => setDecisionHovered(false)}
             style={{
               width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
-              background: 'rgba(181,134,10,0.08)',
+              background: decisionHovered ? 'rgba(181,134,10,0.13)' : 'rgba(181,134,10,0.08)',
               border: '1px solid rgba(181,134,10,0.20)',
               borderRadius: tokens.radius.full,
               color: '#96680A', fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
               cursor: 'pointer', fontFamily: tokens.font.family,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.space.sm,
-              transition: 'all 0.18s',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(181,134,10,0.13)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(181,134,10,0.08)';
+              transition: 'background 0.18s',
+              outline: 'none',
             }}
           >
             <Icon icon="ph:note-pencil" width={16} />

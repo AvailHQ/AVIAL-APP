@@ -98,6 +98,27 @@ export const S = {
   differentDecisionSuccessBody: "This has been recorded alongside today's contextual estimate.",
   differentDecisionReturnButton: (name: string) => `Return to ${name}`,
 
+  // Athlete dashboard
+  checkInAgain: "Update context again",
+
+  // Consent settings
+  consentSubheading: "You decide what's shared with your coaching staff.",
+  consentVisibilityHeading: "What your coach can see",
+
+  // Session outcome
+  sessionReflectionSaved: "Reflection saved.",
+
+  // Onboarding inline labels
+  onboardingTrainingLevelLabel: "Training level",
+  onboardingInjuryLabel: "Any physical history we should know about?",
+  onboardingInjuryNone: "None significant",
+  onboardingInjurySome: "Yes, some history",
+  onboardingSleepHoursLabel: "Average hours per night",
+  onboardingSleepConsistencyLabel: "How consistent is it?",
+
+  // Coach athlete detail
+  coachTrendLabel: "7-day pattern",
+
   // Context unavailable
   contextUnavailable: "Context unavailable",
 

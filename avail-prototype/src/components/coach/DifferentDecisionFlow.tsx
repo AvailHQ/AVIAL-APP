@@ -28,11 +28,12 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
   const [selectedReason, setSelectedReason] = useState<DifferentDecisionReason | null>(null);
   const [notes, setNotes] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [confirmHovered, setConfirmHovered] = useState(false);
 
   const handleSubmit = () => {
     if (!selectedReason || !athlete.direction) return;
     const decision: DifferentDecision = {
-      id: Math.random().toString(36).slice(2),
+      id: crypto.randomUUID(),
       athleteId: athlete.athleteId,
       date: new Date().toISOString().split('T')[0],
       reason: selectedReason,
@@ -167,9 +168,13 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
       <button
         onClick={handleSubmit}
         disabled={!selectedReason}
+        onMouseEnter={() => selectedReason && setConfirmHovered(true)}
+        onMouseLeave={() => setConfirmHovered(false)}
         style={{
           width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: selectedReason ? 'rgba(181,134,10,0.10)' : 'rgba(0,0,0,0.06)',
+          background: selectedReason
+            ? confirmHovered ? 'rgba(181,134,10,0.16)' : 'rgba(181,134,10,0.10)'
+            : 'rgba(0,0,0,0.06)',
           border: selectedReason ? '1px solid rgba(181,134,10,0.22)' : '1px solid transparent',
           borderRadius: tokens.radius.full,
           color: selectedReason ? '#96680A' : tokens.color.textMuted,
@@ -177,7 +182,8 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
           cursor: selectedReason ? 'pointer' : 'not-allowed',
           fontFamily: tokens.font.family,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.space.sm,
-          transition: 'all 0.18s',
+          transition: 'background 0.18s',
+          outline: 'none',
         }}
       >
         <Icon icon="ph:check" width={16} />

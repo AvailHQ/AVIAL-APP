@@ -35,7 +35,7 @@ export default function SessionOutcomeCapture({ athleteName, loadScore, onSubmit
   const handleSubmit = () => {
     if (!selected) return;
     onSubmit({
-      sessionId: Math.random().toString(36).slice(2),
+      sessionId: crypto.randomUUID(),
       date: new Date().toISOString().split('T')[0],
       outcome: selected,
       reflections,
@@ -56,7 +56,7 @@ export default function SessionOutcomeCapture({ athleteName, loadScore, onSubmit
           </div>
           <div>
             <div style={{ fontSize: '20px', fontWeight: tokens.font.bold, color: tokens.color.textPrimary, marginBottom: tokens.space.sm }}>
-              Reflection saved.
+              {S.sessionReflectionSaved}
             </div>
             <div style={{ fontSize: tokens.font.md, color: tokens.color.textSecondary, lineHeight: '1.6', maxWidth: '300px' }}>
               {S.sessionConfirmation}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
@@ -18,6 +18,13 @@ interface Props {
 export default function ConsentSettings({ athleteName, consentState, onUpdate, onBack }: Props) {
   const [sharing, setSharing] = useState(consentState.sharingWithCoach);
   const [saved, setSaved] = useState(false);
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    };
+  }, []);
 
   const handleToggle = (value: boolean) => {
     setSharing(value);
@@ -27,7 +34,8 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
       sharingWithCoach: value,
       lastUpdated: new Date().toISOString().split('T')[0],
     });
-    setTimeout(() => setSaved(false), 2000);
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    savedTimerRef.current = setTimeout(() => setSaved(false), 2000);
   };
 
   return (
@@ -44,7 +52,7 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
           </div>
         </div>
         <div style={{ fontSize: tokens.font.md, color: tokens.color.textSecondary, lineHeight: '1.5' }}>
-          You decide what's shared with your coaching staff.
+          {S.consentSubheading}
         </div>
       </div>
 
@@ -76,7 +84,7 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
       {/* What coaches can see */}
       <Card style={{ marginBottom: tokens.space.lg }} padding={tokens.space.lg}>
         <div style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary, marginBottom: tokens.space.md }}>
-          What your coach can see
+          {S.consentVisibilityHeading}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.space.sm }}>
           {[

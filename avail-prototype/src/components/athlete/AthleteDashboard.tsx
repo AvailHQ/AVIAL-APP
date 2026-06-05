@@ -6,9 +6,9 @@ import PageWrapper from '../shared/PageWrapper';
 import Card from '../shared/Card';
 import BackButton from '../shared/BackButton';
 import { DirectionBadge, ConfidenceBadge, TrendBadge } from '../shared/Badge';
-import LoadScoreRing from './LoadScoreRing';
-import TrendChart from './TrendChart';
-import ContextDimensionsPanel from './ContextDimensionsPanel';
+import LoadScoreRing from '../shared/LoadScoreRing';
+import TrendChart from '../shared/TrendChart';
+import ContextDimensionsPanel from '../shared/ContextDimensionsPanel';
 
 interface Props {
   athlete: AthleteProfile;
@@ -132,7 +132,7 @@ export default function AthleteDashboard({
           }}
         >
           <Icon icon="ph:pencil-simple" width={16} />
-          {checkInSubmittedToday ? 'Update context again' : S.dashboardCheckInCta}
+          {checkInSubmittedToday ? S.checkInAgain : S.dashboardCheckInCta}
         </button>
 
         <button
