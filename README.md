@@ -153,7 +153,7 @@ The prototype exists and builds, but it still needs review fixes and hardening b
   - `docs/dev/testing_rules.md`
   - `docs/dev/development_log.md`
 - Pure frontend prototype exists in `avail-prototype/`
-- Prototype build passes with `npm.cmd run build`
+- Prototype build passes with `npm run build`
 - `.gitignore` excludes `node_modules/`, `dist/`, `.claude/`, logs, and local env files
 - `avail-product-reviewer` skill has been created
 - External review skills have been installed:
@@ -257,12 +257,10 @@ Start here:
 
 ## First-Time Setup
 
-Use PowerShell from the repo root:
-
-```powershell
-cd E:\Github\AVIAL-APP\avail-prototype
-npm.cmd install
-npm.cmd run dev
+```bash
+cd avail-prototype
+npm install
+npm run dev
 ```
 
 Open:
@@ -273,12 +271,33 @@ http://localhost:5173
 
 Build check:
 
+```bash
+cd avail-prototype
+npm run build
+```
+
+### Node Version
+
+This project targets Node 20 LTS. A `.nvmrc` file is included in `avail-prototype/`.
+
+```bash
+# If you use nvm
+nvm use
+```
+
+### Windows Users
+
+If you are on Windows and using **Git Bash or WSL**, the commands above work as-is.
+
+If you are using **PowerShell** and `npm` is blocked by your execution policy, use `npm.cmd` locally:
+
 ```powershell
-cd E:\Github\AVIAL-APP\avail-prototype
+npm.cmd install
+npm.cmd run dev
 npm.cmd run build
 ```
 
-Use `npm.cmd` instead of `npm` on this machine because PowerShell may block `npm.ps1`.
+Do not use `npm.cmd` in scripts or CI configuration — CI runs on Linux and uses standard `npm`.
 
 ## Current Prototype
 
