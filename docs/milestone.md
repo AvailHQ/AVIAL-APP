@@ -71,7 +71,7 @@ Required screens:
 
 Acceptance criteria:
 
-- `npm.cmd run build` passes
+- `npm run build` passes
 - Prototype runs locally
 - Coach views receive sanitized `CoachAthleteView` data only
 - Consent-off athlete shows neutral `Context unavailable`
@@ -184,7 +184,7 @@ Acceptance criteria:
 - Copy is auditable
 - Core workflows remain intact
 - Components are not over-abstracted
-- `npm.cmd run build` passes
+- `npm run build` passes
 - Basic tests pass, if test tooling has been added
 
 Recommended review skills:
