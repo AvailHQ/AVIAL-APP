@@ -46,8 +46,7 @@ export interface AthleteProfile {
   sport: string;
   position?: string;
   avatarInitials: string;
-  avatarPosition?: string;      // athlete id for individual face image
-  avatarObjectPosition?: string; // CSS object-position to fine-tune face centering
+  avatarCrop?: AvatarCrop;
   cycleRegularity: 'Regular' | 'Irregular' | 'Unknown' | 'HormonalContraception';
   trainingBackground: 'Recreational' | 'Club' | 'Semi-Pro' | 'Elite';
   sleepVariability: 'Low' | 'Moderate' | 'High';
@@ -82,8 +81,7 @@ export interface CoachAthleteView {
   athleteId: string;
   name: string;
   avatarInitials: string;
-  avatarPosition?: string;
-  avatarObjectPosition?: string;
+  avatarCrop?: AvatarCrop;
   sport: string;
   position?: string;
   loadScore: number | null;
@@ -97,6 +95,12 @@ export interface CoachAthleteView {
   dimensions: ContextDimension[];
   contextUnavailable: boolean;
   pendingCheckIn: boolean;
+}
+
+export interface AvatarCrop {
+  centerX: number;
+  centerY: number;
+  size: number;
 }
 
 export interface DifferentDecision {

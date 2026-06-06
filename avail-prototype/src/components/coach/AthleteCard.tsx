@@ -121,8 +121,7 @@ export default function AthleteCard({ athlete, onClick }: Props) {
         <div style={{ position: 'absolute', top: 6, left: 6 }}>
           <Avatar
             initials={athlete.avatarInitials}
-            avatarPosition={athlete.avatarPosition}
-            objectPosition={athlete.avatarObjectPosition}
+            avatarCrop={athlete.avatarCrop}
             size={60}
             unavailable={isUnavailable}
           />

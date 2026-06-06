@@ -47,8 +47,7 @@ export default function CoachAthleteDetail({ athlete, differentDecisions, onDiff
       <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.md, marginBottom: tokens.space['2xl'] }}>
         <Avatar
           initials={athlete.avatarInitials}
-          avatarPosition={athlete.avatarPosition}
-          objectPosition={athlete.avatarObjectPosition}
+          avatarCrop={athlete.avatarCrop}
           size={48}
           unavailable={athlete.contextUnavailable}
         />

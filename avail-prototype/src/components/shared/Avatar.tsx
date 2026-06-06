@@ -1,16 +1,24 @@
 import { tokens } from '../../tokens';
+import type { AvatarCrop } from '../../types';
 
 interface Props {
   initials: string;
-  avatarPosition?: string;      // athlete id used as filename e.g. 'maya-chen'
-  objectPosition?: string;      // CSS object-position to fine-tune face centering
+  avatarCrop?: AvatarCrop;
   size?: number;
   unavailable?: boolean;
 }
 
-export default function Avatar({ initials, avatarPosition, objectPosition = 'center 35%', size = 36, unavailable = false }: Props) {
-  const hasPhoto = !!avatarPosition && !unavailable;
-  const src = hasPhoto ? `/athletes/${avatarPosition}.png` : null;
+const SQUAD_IMG = '/athletes/squad.png';
+const SQUAD_IMG_WIDTH = 1536;
+const SQUAD_IMG_HEIGHT = 1024;
+
+export default function Avatar({ initials, avatarCrop, size = 36, unavailable = false }: Props) {
+  const hasPhoto = !!avatarCrop && !unavailable;
+  const scale = avatarCrop ? size / avatarCrop.size : 1;
+  const backgroundWidth = SQUAD_IMG_WIDTH * scale;
+  const backgroundHeight = SQUAD_IMG_HEIGHT * scale;
+  const backgroundX = avatarCrop ? size / 2 - avatarCrop.centerX * scale : 0;
+  const backgroundY = avatarCrop ? size / 2 - avatarCrop.centerY * scale : 0;
 
   const baseStyle: React.CSSProperties = {
     width: size,
@@ -37,20 +45,19 @@ export default function Avatar({ initials, avatarPosition, objectPosition = 'cen
     );
   }
 
-  if (src) {
+  if (hasPhoto) {
     return (
-      <div style={baseStyle}>
-        <img
-          src={src}
-          alt=""
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition,
-          }}
-        />
-      </div>
+      <div
+        aria-hidden="true"
+        style={{
+          ...baseStyle,
+          backgroundImage: `url(${SQUAD_IMG})`,
+          backgroundSize: `${backgroundWidth}px ${backgroundHeight}px`,
+          backgroundPosition: `${backgroundX}px ${backgroundY}px`,
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: 'rgba(255,255,255,0.72)',
+        }}
+      />
     );
   }
 

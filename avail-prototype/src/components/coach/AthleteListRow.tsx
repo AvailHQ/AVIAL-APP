@@ -50,8 +50,7 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
       {/* Avatar */}
       <Avatar
         initials={athlete.avatarInitials}
-        avatarPosition={athlete.avatarPosition}
-        objectPosition={athlete.avatarObjectPosition}
+        avatarCrop={athlete.avatarCrop}
         size={36}
         unavailable={athlete.contextUnavailable}
       />
