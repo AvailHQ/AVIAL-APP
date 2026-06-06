@@ -2,29 +2,25 @@ import { tokens } from '../../tokens';
 
 interface Props {
   initials: string;
-  avatarPosition?: string;  // CSS background-position in the squad.jpg sprite
+  avatarPosition?: string;      // athlete id used as filename e.g. 'maya-chen'
+  objectPosition?: string;      // CSS object-position to fine-tune face centering
   size?: number;
   unavailable?: boolean;
 }
 
-const SQUAD_IMG = '/athletes/squad.jpg';
-
-// 3-column × 2-row sprite sheet
-// background-size must be 300% × 200% to map each cell to the display size
-const SPRITE_BG_SIZE = '300% 200%';
-
-export default function Avatar({ initials, avatarPosition, size = 36, unavailable = false }: Props) {
+export default function Avatar({ initials, avatarPosition, objectPosition = 'center 35%', size = 36, unavailable = false }: Props) {
   const hasPhoto = !!avatarPosition && !unavailable;
+  const src = hasPhoto ? `/athletes/${avatarPosition}.png` : null;
 
   const baseStyle: React.CSSProperties = {
     width: size,
     height: size,
     borderRadius: '50%',
+    flexShrink: 0,
+    overflow: 'hidden',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    flexShrink: 0,
-    overflow: 'hidden',
   };
 
   if (unavailable) {
@@ -41,19 +37,24 @@ export default function Avatar({ initials, avatarPosition, size = 36, unavailabl
     );
   }
 
-  if (hasPhoto) {
+  if (src) {
     return (
-      <div style={{
-        ...baseStyle,
-        backgroundImage: `url(${SQUAD_IMG})`,
-        backgroundSize: SPRITE_BG_SIZE,
-        backgroundPosition: avatarPosition,
-        backgroundRepeat: 'no-repeat',
-      }} />
+      <div style={baseStyle}>
+        <img
+          src={src}
+          alt=""
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition,
+          }}
+        />
+      </div>
     );
   }
 
-  // Initials fallback (Chloe Williams or any athlete without a photo)
+  // Initials fallback
   return (
     <div style={{
       ...baseStyle,

@@ -72,7 +72,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                 onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 2px rgba(79,163,199,0.4)'; }}
                 onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
               >
-                <Avatar initials={active.avatarInitials} avatarPosition={active.avatarPosition} size={36} />
+                <Avatar initials={active.avatarInitials} avatarPosition={active.avatarPosition} objectPosition={active.avatarObjectPosition} size={36} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: tokens.font.md, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary }}>{active.name}</div>
                   <div style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>{active.sport} · {active.position}</div>
@@ -108,7 +108,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
                       onFocus={e => { e.currentTarget.style.background = 'rgba(61,155,107,0.06)'; }}
                       onBlur={e => { e.currentTarget.style.background = a.id === selectedAthlete ? 'rgba(61,155,107,0.06)' : 'transparent'; }}
                     >
-                      <Avatar initials={a.avatarInitials} avatarPosition={a.avatarPosition} size={30} />
+                      <Avatar initials={a.avatarInitials} avatarPosition={a.avatarPosition} objectPosition={a.avatarObjectPosition} size={30} />
                       <div>
                         <div style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.medium, color: tokens.color.textPrimary }}>{a.name}</div>
                         <div style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted }}>{a.position}</div>

@@ -11,7 +11,8 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Midfielder',
     avatarInitials: 'MC',
-    avatarPosition: '100% 0%',   // top-right
+    avatarPosition: 'maya-chen',
+    avatarObjectPosition: '50% 30%',
     cycleRegularity: 'Regular',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -23,7 +24,8 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Forward',
     avatarInitials: 'SR',
-    avatarPosition: '0% 100%',   // bottom-left
+    avatarPosition: 'sofia-rodriguez',
+    avatarObjectPosition: '50% 25%',
     cycleRegularity: 'Irregular',
     trainingBackground: 'Elite',
     sleepVariability: 'Moderate',
@@ -35,7 +37,8 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Defender',
     avatarInitials: 'PS',
-    avatarPosition: '50% 100%',  // bottom-center
+    avatarPosition: 'priya-sharma',
+    avatarObjectPosition: '50% 28%',
     cycleRegularity: 'Regular',
     trainingBackground: 'Semi-Pro',
     sleepVariability: 'Moderate',
@@ -47,7 +50,8 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Goalkeeper',
     avatarInitials: 'ET',
-    avatarPosition: '0% 0%',     // top-left
+    avatarPosition: 'emma-thompson',
+    avatarObjectPosition: '50% 28%',
     cycleRegularity: 'Regular',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -59,7 +63,8 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Midfielder',
     avatarInitials: 'AO',
-    avatarPosition: '50% 0%',    // top-center
+    avatarPosition: 'aisha-okafor',
+    avatarObjectPosition: '50% 28%',
     cycleRegularity: 'Regular',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',
@@ -71,7 +76,8 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Defender',
     avatarInitials: 'ZM',
-    avatarPosition: '100% 100%', // bottom-right
+    avatarPosition: 'zoe-mitchell',
+    avatarObjectPosition: '50% 30%',
     cycleRegularity: 'HormonalContraception',
     trainingBackground: 'Elite',
     sleepVariability: 'Low',

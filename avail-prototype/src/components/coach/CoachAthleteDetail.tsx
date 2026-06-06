@@ -48,6 +48,7 @@ export default function CoachAthleteDetail({ athlete, differentDecisions, onDiff
         <Avatar
           initials={athlete.avatarInitials}
           avatarPosition={athlete.avatarPosition}
+          objectPosition={athlete.avatarObjectPosition}
           size={48}
           unavailable={athlete.contextUnavailable}
         />

@@ -88,6 +88,7 @@ function SquadOverviewRow({ athlete }: OverviewRowProps) {
       <Avatar
         initials={athlete.avatarInitials}
         avatarPosition={athlete.avatarPosition}
+        objectPosition={athlete.avatarObjectPosition}
         size={28}
         unavailable={isUnavailable}
       />

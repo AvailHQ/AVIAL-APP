@@ -28,3 +28,5 @@ This is a recent-log check, not a full project audit.
 - 2026-06-05 cc: Redesign coach dashboard — add metric cards, Squad Load Overview chart, and card/list toggle view with AthleteCard component.
 - 2026-06-05 cc: Add CLAUDE.md — commands, source structure, privacy firewall, product boundaries, copy rules, naming conventions.
 - 2026-06-05 cc: Add Avatar component with squad.jpg sprite support; update all avatar rendering across Login, coach components, and dashboard.
+- 2026-06-06 cc: Fix avatar filename to squad.png; switch from CSS sprite to individual cropped images per athlete using sips; Avatar component updated to use object-fit img approach for accurate face centering.
+- 2026-06-06 cc: Fix avatar face alignment — tighter sips crop (6% padding), objectPosition changed to center 20% to focus on face area.

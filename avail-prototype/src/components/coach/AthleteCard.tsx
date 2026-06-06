@@ -122,6 +122,7 @@ export default function AthleteCard({ athlete, onClick }: Props) {
           <Avatar
             initials={athlete.avatarInitials}
             avatarPosition={athlete.avatarPosition}
+            objectPosition={athlete.avatarObjectPosition}
             size={60}
             unavailable={isUnavailable}
           />

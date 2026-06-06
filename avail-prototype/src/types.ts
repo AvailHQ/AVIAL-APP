@@ -46,7 +46,8 @@ export interface AthleteProfile {
   sport: string;
   position?: string;
   avatarInitials: string;
-  avatarPosition?: string; // CSS background-position for squad.jpg sprite (e.g. '0% 0%')
+  avatarPosition?: string;      // athlete id for individual face image
+  avatarObjectPosition?: string; // CSS object-position to fine-tune face centering
   cycleRegularity: 'Regular' | 'Irregular' | 'Unknown' | 'HormonalContraception';
   trainingBackground: 'Recreational' | 'Club' | 'Semi-Pro' | 'Elite';
   sleepVariability: 'Low' | 'Moderate' | 'High';
@@ -82,6 +83,7 @@ export interface CoachAthleteView {
   name: string;
   avatarInitials: string;
   avatarPosition?: string;
+  avatarObjectPosition?: string;
   sport: string;
   position?: string;
   loadScore: number | null;
