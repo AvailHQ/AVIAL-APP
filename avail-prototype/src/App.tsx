@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import type { AppState, AppView, DailyCheckIn as DailyCheckInData, ConsentState, SessionOutcome, DifferentDecision } from './types';
-import { ATHLETES, LOAD_SCORES, INITIAL_CONSENT, COACH_DASHBOARD_ORDER } from './mockData';
+import { ATHLETES, LOAD_SCORES, INITIAL_CONSENT, COACH_DASHBOARD_ORDER, PENDING_CHECK_IN_IDS } from './mockData';
 import { buildCoachView } from './utils/coachView';
 import { tokens } from './tokens';
 import { S } from './strings';
@@ -116,14 +116,14 @@ export default function App() {
 
   const coachViews = useMemo(
     () => COACH_DASHBOARD_ORDER.map(id =>
-      buildCoachView(id, state.consent, state.loadScores, state.athletes)
+      buildCoachView(id, state.consent, state.loadScores, state.athletes, PENDING_CHECK_IN_IDS)
     ),
     [state.consent, state.loadScores, state.athletes]
   );
 
   const selectedCoachView = useMemo(
     () => selectedCoachAthleteId
-      ? buildCoachView(selectedCoachAthleteId, state.consent, state.loadScores, state.athletes)
+      ? buildCoachView(selectedCoachAthleteId, state.consent, state.loadScores, state.athletes, PENDING_CHECK_IN_IDS)
       : null,
     [selectedCoachAthleteId, state.consent, state.loadScores, state.athletes]
   );

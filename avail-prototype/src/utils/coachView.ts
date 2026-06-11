@@ -13,12 +13,13 @@ export function buildCoachView(
   consent: Record<string, ConsentState>,
   loadScores: Record<string, LoadScore>,
   athletes: AthleteProfile[],
+  pendingCheckInIds: readonly string[],
 ): CoachAthleteView {
   const athlete = athletes.find(a => a.id === athleteId)!;
   const consentState = consent[athleteId];
   const score = loadScores[athleteId];
   const contextUnavailable = !consentState?.sharingWithCoach;
-  const pendingCheckIn = athleteId === 'emma-thompson';
+  const pendingCheckIn = pendingCheckInIds.includes(athleteId);
 
   if (contextUnavailable) {
     return {

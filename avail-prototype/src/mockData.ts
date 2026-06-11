@@ -252,6 +252,9 @@ export const INITIAL_CONSENT: Record<string, ConsentState> = {
   'chloe-williams': { athleteId: 'chloe-williams', sharingWithCoach: true,  lastUpdated: '2026-05-19' },
 };
 
+// Athletes who have not yet submitted today's check-in
+export const PENDING_CHECK_IN_IDS = ['emma-thompson'];
+
 // Ordered for coach dashboard display
 export const COACH_DASHBOARD_ORDER = [
   'chloe-williams',

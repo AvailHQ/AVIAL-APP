@@ -34,3 +34,4 @@ This is a recent-log check, not a full project audit.
 - 2026-06-11 cc: Move 8 page components from components/{athlete,coach}/ to pages/{athlete,coach}/ to match code_maintenance_rules.md; update all imports; build passes.
 - 2026-06-11 cc: Add docs/pages/ PRD documents for all 9 pages (Login + 5 athlete + 3 coach), written retroactively against the implemented prototype.
 - 2026-06-11 cc: Re-review prototype against review_checklist, product boundaries, privacy, and copy rules — findings recorded in review output (no P1 privacy leaks; P2/P3 copy-token findings open).
+- 2026-06-11 cc: Fix review P2-1 — move hardcoded pending-check-in athlete id out of utils/coachView.ts into mockData PENDING_CHECK_IN_IDS, passed as a buildCoachView parameter; verified in browser, behaviour unchanged.
