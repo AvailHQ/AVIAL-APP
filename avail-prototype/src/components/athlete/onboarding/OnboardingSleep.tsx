@@ -41,10 +41,10 @@ export default function OnboardingSleep({ data, onChange, onNext }: Props) {
               onClick={() => onChange({ sleepQuality: h.value })}
               style={{
                 padding: '6px 14px', borderRadius: tokens.radius.full,
-                border: `1.5px solid ${data.sleepQuality === h.value ? '#3D9B6B' : 'rgba(0,0,0,0.08)'}`,
+                border: `1.5px solid ${data.sleepQuality === h.value ? tokens.color.brandGreen : 'rgba(0,0,0,0.08)'}`,
                 background: data.sleepQuality === h.value ? 'rgba(61,155,107,0.07)' : 'rgba(255,255,255,0.70)',
                 cursor: 'pointer', fontSize: tokens.font.sm, fontWeight: tokens.font.medium,
-                color: data.sleepQuality === h.value ? '#2D7A52' : tokens.color.textPrimary,
+                color: data.sleepQuality === h.value ? tokens.color.statusMaintain : tokens.color.textPrimary,
                 transition: 'all 0.18s',
                 fontFamily: tokens.font.family,
                 outline: 'none',
@@ -76,7 +76,7 @@ export default function OnboardingSleep({ data, onChange, onNext }: Props) {
         style={{
           width: '100%', marginTop: tokens.space.lg,
           padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: canContinue ? 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)' : 'rgba(0,0,0,0.08)',
+          background: canContinue ? tokens.color.brandGradient : 'rgba(0,0,0,0.08)',
           border: 'none', borderRadius: tokens.radius.full,
           color: canContinue ? '#fff' : tokens.color.textMuted,
           fontSize: tokens.font.md, fontWeight: tokens.font.semibold,

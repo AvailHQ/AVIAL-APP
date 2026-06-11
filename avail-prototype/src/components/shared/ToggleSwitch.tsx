@@ -36,7 +36,7 @@ export default function ToggleSwitch({ on, onChange, label, description }: Toggl
           width: '48px',
           height: '28px',
           borderRadius: '14px',
-          background: on ? '#3D9B6B' : 'rgba(0,0,0,0.14)',
+          background: on ? tokens.color.brandGreen : 'rgba(0,0,0,0.14)',
           position: 'relative',
           transition: 'background 0.2s ease',
           marginTop: '2px',

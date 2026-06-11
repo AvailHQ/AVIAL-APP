@@ -179,7 +179,7 @@ export default function CoachAthleteDetail({ athlete, differentDecisions, onDiff
               background: decisionHovered ? 'rgba(181,134,10,0.13)' : 'rgba(181,134,10,0.08)',
               border: '1px solid rgba(181,134,10,0.20)',
               borderRadius: tokens.radius.full,
-              color: '#96680A', fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
+              color: tokens.color.statusAttention, fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
               cursor: 'pointer', fontFamily: tokens.font.family,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.space.sm,
               transition: 'background 0.18s',

@@ -16,7 +16,7 @@ export default function ChoiceCard({ label, selected, onSelect, icon }: Props) {
         width: '100%',
         padding: `${tokens.space.md} ${tokens.space.lg}`,
         borderRadius: tokens.radius.lg,
-        border: `1.5px solid ${selected ? '#3D9B6B' : 'rgba(0,0,0,0.08)'}`,
+        border: `1.5px solid ${selected ? tokens.color.brandGreen : 'rgba(0,0,0,0.08)'}`,
         background: selected ? 'rgba(61,155,107,0.07)' : 'rgba(255,255,255,0.70)',
         cursor: 'pointer',
         display: 'flex',
@@ -32,11 +32,11 @@ export default function ChoiceCard({ label, selected, onSelect, icon }: Props) {
       onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 2px rgba(61,155,107,0.4)'; }}
       onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
     >
-      {icon && <Icon icon={icon} width={20} height={20} color={selected ? '#3D9B6B' : tokens.color.textSecondary} />}
+      {icon && <Icon icon={icon} width={20} height={20} color={selected ? tokens.color.brandGreen : tokens.color.textSecondary} />}
       <span style={{
         fontSize: tokens.font.md,
         fontWeight: selected ? tokens.font.semibold : tokens.font.regular,
-        color: selected ? '#2D7A52' : tokens.color.textPrimary,
+        color: selected ? tokens.color.statusMaintain : tokens.color.textPrimary,
       }}>
         {label}
       </span>

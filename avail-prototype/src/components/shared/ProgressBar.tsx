@@ -16,7 +16,7 @@ export default function ProgressBar({ steps, current }: ProgressBarProps) {
             flex: 1,
             borderRadius: tokens.radius.full,
             background: i < current
-              ? '#3D9B6B'
+              ? tokens.color.brandGreen
               : i === current
               ? 'rgba(61,155,107,0.35)'
               : 'rgba(0,0,0,0.08)',

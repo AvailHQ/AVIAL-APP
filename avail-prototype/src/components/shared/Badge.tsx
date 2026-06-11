@@ -64,7 +64,7 @@ export function TrendBadge({ trend, size }: { trend: Trend | null; size?: 'sm' |
 
 export function PriorityBadge({ state }: { state: string }) {
   const styles: Record<string, { color: string; bg: string }> = {
-    'Requires Attention': { color: '#96680A', bg: 'rgba(181,134,10,0.10)' },
+    'Requires Attention': { color: tokens.color.statusAttention, bg: 'rgba(181,134,10,0.10)' },
     'Stable Context':     { color: tokens.color.statusMaintain, bg: tokens.color.statusMaintainBg },
     'Pending Check-In':   { color: tokens.color.statusIncrease, bg: tokens.color.statusIncreaseBg },
     'Context Unavailable':{ color: tokens.color.unavailable, bg: tokens.color.unavailableBg },

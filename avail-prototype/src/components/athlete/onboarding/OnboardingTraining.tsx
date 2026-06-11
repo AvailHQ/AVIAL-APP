@@ -16,13 +16,13 @@ const TRAINING_OPTIONS: { value: TrainingLevel; label: string }[] = [
   { value: 'Elite', label: S.onboardingTrainingElite },
 ];
 
-const INJURY_OPTIONS = [
-  { v: false, l: S.onboardingInjuryNone },
-  { v: true, l: S.onboardingInjurySome },
+const PHYSICAL_HISTORY_OPTIONS = [
+  { v: false, l: S.onboardingPhysicalHistoryNone },
+  { v: true, l: S.onboardingPhysicalHistorySome },
 ];
 
 export default function OnboardingTraining({ data, onChange, onNext }: Props) {
-  const canContinue = data.trainingLevel !== undefined && data.injuryHistory !== undefined;
+  const canContinue = data.trainingLevel !== undefined && data.physicalHistory !== undefined;
 
   return (
     <div>
@@ -42,21 +42,21 @@ export default function OnboardingTraining({ data, onChange, onNext }: Props) {
       ))}
 
       <div style={{ marginTop: tokens.space.xl, fontSize: tokens.font.sm, color: tokens.color.textMuted, marginBottom: tokens.space.md, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
-        {S.onboardingInjuryLabel}
+        {S.onboardingPhysicalHistoryLabel}
       </div>
       <div style={{ display: 'flex', gap: tokens.space.sm }}>
-        {INJURY_OPTIONS.map(opt => (
+        {PHYSICAL_HISTORY_OPTIONS.map(opt => (
           <button
             key={String(opt.v)}
-            onClick={() => onChange({ injuryHistory: opt.v })}
+            onClick={() => onChange({ physicalHistory: opt.v })}
             style={{
               flex: 1, padding: `${tokens.space.sm} ${tokens.space.md}`,
               borderRadius: tokens.radius.md,
-              border: `1.5px solid ${data.injuryHistory === opt.v ? '#3D9B6B' : 'rgba(0,0,0,0.08)'}`,
-              background: data.injuryHistory === opt.v ? 'rgba(61,155,107,0.07)' : 'rgba(255,255,255,0.70)',
+              border: `1.5px solid ${data.physicalHistory === opt.v ? tokens.color.brandGreen : 'rgba(0,0,0,0.08)'}`,
+              background: data.physicalHistory === opt.v ? 'rgba(61,155,107,0.07)' : 'rgba(255,255,255,0.70)',
               cursor: 'pointer', textAlign: 'center',
-              fontSize: tokens.font.sm, fontWeight: data.injuryHistory === opt.v ? tokens.font.semibold : tokens.font.regular,
-              color: data.injuryHistory === opt.v ? '#2D7A52' : tokens.color.textPrimary,
+              fontSize: tokens.font.sm, fontWeight: data.physicalHistory === opt.v ? tokens.font.semibold : tokens.font.regular,
+              color: data.physicalHistory === opt.v ? tokens.color.statusMaintain : tokens.color.textPrimary,
               transition: 'all 0.18s',
               fontFamily: tokens.font.family,
               outline: 'none',
@@ -75,7 +75,7 @@ export default function OnboardingTraining({ data, onChange, onNext }: Props) {
         style={{
           width: '100%', marginTop: tokens.space.xl,
           padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: canContinue ? 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)' : 'rgba(0,0,0,0.08)',
+          background: canContinue ? tokens.color.brandGradient : 'rgba(0,0,0,0.08)',
           border: 'none', borderRadius: tokens.radius.full,
           color: canContinue ? '#fff' : tokens.color.textMuted,
           fontSize: tokens.font.md, fontWeight: tokens.font.semibold,

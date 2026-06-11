@@ -39,11 +39,11 @@ export default function OnboardingWelcome({ firstName: _firstName, onNext }: Pro
         onClick={onNext}
         style={{
           width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)',
+          background: tokens.color.brandGradient,
           border: 'none', borderRadius: tokens.radius.full,
           color: '#fff', fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
           cursor: 'pointer', fontFamily: tokens.font.family,
-          boxShadow: '0 2px 12px rgba(61,155,107,0.22)',
+          boxShadow: tokens.color.brandShadow,
         }}
       >
         {S.onboardingWelcomeCta}

@@ -5,7 +5,7 @@ export type SleepConsistency = 'Pretty consistent' | 'Varies a lot' | 'Hard to s
 export interface OnboardingData {
   cycleRegularity?: CycleOption;
   trainingLevel?: TrainingLevel;
-  injuryHistory?: boolean;
+  physicalHistory?: boolean;
   sleepQuality?: number;
   sleepConsistency?: SleepConsistency;
 }

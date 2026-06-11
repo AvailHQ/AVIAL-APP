@@ -40,7 +40,7 @@ export default function OnboardingCycle({ data, onChange, onNext }: Props) {
         style={{
           width: '100%', marginTop: tokens.space.lg,
           padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: data.cycleRegularity ? 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)' : 'rgba(0,0,0,0.08)',
+          background: data.cycleRegularity ? tokens.color.brandGradient : 'rgba(0,0,0,0.08)',
           border: 'none', borderRadius: tokens.radius.full,
           color: data.cycleRegularity ? '#fff' : tokens.color.textMuted,
           fontSize: tokens.font.md, fontWeight: tokens.font.semibold,

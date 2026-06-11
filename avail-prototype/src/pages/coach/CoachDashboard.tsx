@@ -1,175 +1,21 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { tokens, directionColors, confidenceColor } from '../../tokens';
-import Avatar from '../../components/shared/Avatar';
+import { tokens } from '../../tokens';
 import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
 import PageWrapper from '../../components/shared/PageWrapper';
 import BackButton from '../../components/shared/BackButton';
 import PrioritySection from '../../components/coach/PrioritySection';
 import AthleteCard from '../../components/coach/AthleteCard';
+import MetricCard from '../../components/coach/MetricCard';
+import type { MetricCardProps } from '../../components/coach/MetricCard';
+import SquadOverviewRow from '../../components/coach/SquadOverviewRow';
 
 interface Props {
   athletes: CoachAthleteView[];
   onSelectAthlete: (id: string) => void;
   onBack: () => void;
 }
-
-// ── Metric card ──────────────────────────────────────────────────────────────
-
-interface MetricCardProps {
-  value: number;
-  label: string;
-  color: string;
-  bg: string;
-  border: string;
-  icon: string;
-}
-
-function MetricCard({ value, label, color, bg, border, icon }: MetricCardProps) {
-  return (
-    <div style={{
-      flex: '1 1 120px',
-      padding: `${tokens.space.lg} ${tokens.space.lg}`,
-      background: bg,
-      border: `1px solid ${border}`,
-      borderRadius: tokens.radius.lg,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: tokens.space.xs,
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{
-          fontSize: '32px',
-          fontWeight: tokens.font.bold,
-          color,
-          lineHeight: 1,
-        }}>
-          {value}
-        </div>
-        <Icon icon={icon} width={18} color={color} style={{ opacity: 0.6 }} />
-      </div>
-      <div style={{
-        fontSize: tokens.font.xs,
-        fontWeight: tokens.font.semibold,
-        color,
-        opacity: 0.8,
-        lineHeight: 1.3,
-      }}>
-        {label}
-      </div>
-    </div>
-  );
-}
-
-// ── Squad overview row ────────────────────────────────────────────────────────
-
-interface OverviewRowProps {
-  athlete: CoachAthleteView;
-}
-
-function SquadOverviewRow({ athlete }: OverviewRowProps) {
-  const isUnavailable = athlete.contextUnavailable;
-  const isPending = athlete.pendingCheckIn;
-  const hasScore = athlete.loadScore !== null && !isUnavailable && !isPending;
-
-  const { text: barColor } = directionColors(athlete.direction);
-  const barWidth = hasScore ? `${athlete.loadScore}%` : '0%';
-
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: tokens.space.md,
-      padding: `${tokens.space.sm} 0`,
-      borderBottom: `1px solid rgba(0,0,0,0.04)`,
-    }}>
-      {/* Avatar */}
-      <Avatar
-        initials={athlete.avatarInitials}
-        avatarCrop={athlete.avatarCrop}
-        size={28}
-        unavailable={isUnavailable}
-      />
-
-      {/* Name */}
-      <div style={{
-        width: '108px', flexShrink: 0,
-        fontSize: tokens.font.sm,
-        fontWeight: tokens.font.medium,
-        color: isUnavailable ? tokens.color.textMuted : tokens.color.textPrimary,
-        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-      }}>
-        {athlete.name}
-      </div>
-
-      {/* Bar track */}
-      <div style={{
-        flex: 1,
-        height: '8px',
-        background: 'rgba(0,0,0,0.06)',
-        borderRadius: tokens.radius.full,
-        overflow: 'hidden',
-        position: 'relative',
-      }}>
-        {hasScore && (
-          <div style={{
-            height: '100%',
-            width: barWidth,
-            background: barColor,
-            borderRadius: tokens.radius.full,
-            opacity: 0.75,
-            transition: 'width 0.4s ease',
-          }} />
-        )}
-        {isPending && (
-          <div style={{
-            height: '100%',
-            width: '60%',
-            background: `repeating-linear-gradient(
-              90deg,
-              rgba(45,123,184,0.25) 0px,
-              rgba(45,123,184,0.25) 8px,
-              transparent 8px,
-              transparent 14px
-            )`,
-            borderRadius: tokens.radius.full,
-          }} />
-        )}
-        {isUnavailable && (
-          <div style={{
-            height: '100%',
-            width: '100%',
-            background: 'rgba(154,163,173,0.12)',
-            borderRadius: tokens.radius.full,
-          }} />
-        )}
-      </div>
-
-      {/* Score / state label — confidence must accompany the score */}
-      <div style={{
-        width: '72px', flexShrink: 0, textAlign: 'right',
-        fontSize: tokens.font.xs, fontWeight: tokens.font.semibold,
-        color: hasScore ? barColor : tokens.color.textMuted,
-      }}>
-        {hasScore ? (
-          <>
-            <div>{athlete.loadScore}</div>
-            <div style={{
-              fontSize: '10px',
-              fontWeight: tokens.font.medium,
-              color: confidenceColor(athlete.confidence),
-            }}>
-              {athlete.confidence}
-            </div>
-          </>
-        ) : isPending ? S.pendingShort : '—'}
-      </div>
-    </div>
-  );
-}
-
-// ── Main dashboard ────────────────────────────────────────────────────────────
 
 type ViewMode = 'list' | 'card';
 
@@ -189,7 +35,7 @@ export default function CoachDashboard({ athletes, onSelectAthlete, onBack }: Pr
     {
       value: attention.length,
       label: 'Requires Attention',
-      color: '#96680A',
+      color: tokens.color.statusAttention,
       bg: 'rgba(181,134,10,0.07)',
       border: 'rgba(181,134,10,0.18)',
       icon: 'ph:warning',

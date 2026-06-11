@@ -35,7 +35,7 @@ export default function Slider({
         <span style={{
           fontSize: tokens.font.sm,
           fontWeight: tokens.font.semibold,
-          color: '#3D9B6B',
+          color: tokens.color.brandGreen,
           background: 'rgba(61,155,107,0.10)',
           padding: '2px 10px',
           borderRadius: tokens.radius.full,

@@ -83,7 +83,7 @@ export const ATHLETES: AthleteProfile[] = [
     sport: 'Football',
     position: 'Forward',
     avatarInitials: 'CW',
-    avatarCrop: { centerX: 306, centerY: 269, size: 368 },
+    // squad.png has 6 faces for 7 athletes; Chloe falls back to the initials avatar
     cycleRegularity: 'Regular',
     trainingBackground: 'Semi-Pro',
     sleepVariability: 'High',

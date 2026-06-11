@@ -102,9 +102,9 @@ export default function DailyCheckIn({ athleteName, onSubmit, onBack }: Props) {
               style={{
                 padding: `${tokens.space.sm} ${tokens.space.md}`,
                 borderRadius: tokens.radius.full,
-                border: `1.5px solid ${cycleUpdate === opt.value ? '#3D9B6B' : 'rgba(0,0,0,0.08)'}`,
+                border: `1.5px solid ${cycleUpdate === opt.value ? tokens.color.brandGreen : 'rgba(0,0,0,0.08)'}`,
                 background: cycleUpdate === opt.value ? 'rgba(61,155,107,0.08)' : 'rgba(255,255,255,0.70)',
-                color: cycleUpdate === opt.value ? '#2D7A52' : tokens.color.textSecondary,
+                color: cycleUpdate === opt.value ? tokens.color.statusMaintain : tokens.color.textSecondary,
                 fontSize: tokens.font.sm,
                 fontWeight: cycleUpdate === opt.value ? tokens.font.semibold : tokens.font.regular,
                 cursor: 'pointer',
@@ -122,11 +122,11 @@ export default function DailyCheckIn({ athleteName, onSubmit, onBack }: Props) {
         onClick={handleSubmit}
         style={{
           width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)',
+          background: tokens.color.brandGradient,
           border: 'none', borderRadius: tokens.radius.full,
           color: '#fff', fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
           cursor: 'pointer', fontFamily: tokens.font.family,
-          boxShadow: '0 2px 12px rgba(61,155,107,0.22)',
+          boxShadow: tokens.color.brandShadow,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.space.sm,
         }}
       >

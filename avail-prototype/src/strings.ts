@@ -107,9 +107,9 @@ export const S = {
 
   // Onboarding inline labels
   onboardingTrainingLevelLabel: "Training level",
-  onboardingInjuryLabel: "Any physical history we should know about?",
-  onboardingInjuryNone: "None significant",
-  onboardingInjurySome: "Yes, some history",
+  onboardingPhysicalHistoryLabel: "Any physical history we should know about?",
+  onboardingPhysicalHistoryNone: "None significant",
+  onboardingPhysicalHistorySome: "Yes, some history",
   onboardingSleepHoursLabel: "Average hours per night",
   onboardingSleepConsistencyLabel: "How consistent is it?",
 

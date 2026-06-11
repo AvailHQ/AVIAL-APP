@@ -14,7 +14,7 @@ interface ButtonProps {
 
 const variantStyles: Record<Variant, React.CSSProperties> = {
   primary: {
-    background: 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)',
+    background: tokens.color.brandGradient,
     color: '#FFFFFF',
     border: 'none',
     boxShadow: '0 2px 12px rgba(61,155,107,0.25)',
@@ -33,7 +33,7 @@ const variantStyles: Record<Variant, React.CSSProperties> = {
   },
   amber: {
     background: 'rgba(181,134,10,0.10)',
-    color: '#96680A',
+    color: tokens.color.statusAttention,
     border: '1px solid rgba(181,134,10,0.20)',
     boxShadow: 'none',
   },

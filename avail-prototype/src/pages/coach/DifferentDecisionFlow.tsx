@@ -57,7 +57,7 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
             background: 'rgba(181,134,10,0.10)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Icon icon="ph:note-pencil" width={36} color="#96680A" />
+            <Icon icon="ph:note-pencil" width={36} color={tokens.color.statusAttention} />
           </div>
           <div>
             <div style={{ fontSize: '20px', fontWeight: tokens.font.bold, color: tokens.color.textPrimary, marginBottom: tokens.space.sm }}>
@@ -119,9 +119,9 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
                 style={{
                   padding: '7px 14px',
                   borderRadius: tokens.radius.full,
-                  border: `1.5px solid ${isSelected ? '#96680A' : 'rgba(0,0,0,0.08)'}`,
+                  border: `1.5px solid ${isSelected ? tokens.color.statusAttention : 'rgba(0,0,0,0.08)'}`,
                   background: isSelected ? 'rgba(181,134,10,0.09)' : 'rgba(255,255,255,0.70)',
-                  color: isSelected ? '#96680A' : tokens.color.textSecondary,
+                  color: isSelected ? tokens.color.statusAttention : tokens.color.textSecondary,
                   fontSize: tokens.font.sm,
                   fontWeight: isSelected ? tokens.font.semibold : tokens.font.regular,
                   cursor: 'pointer', fontFamily: tokens.font.family,
@@ -177,7 +177,7 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
             : 'rgba(0,0,0,0.06)',
           border: selectedReason ? '1px solid rgba(181,134,10,0.22)' : '1px solid transparent',
           borderRadius: tokens.radius.full,
-          color: selectedReason ? '#96680A' : tokens.color.textMuted,
+          color: selectedReason ? tokens.color.statusAttention : tokens.color.textMuted,
           fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
           cursor: selectedReason ? 'pointer' : 'not-allowed',
           fontFamily: tokens.font.family,

@@ -121,14 +121,14 @@ export default function AthleteDashboard({
           onClick={onCheckIn}
           style={{
             width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
-            background: checkInSubmittedToday ? 'rgba(61,155,107,0.08)' : 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)',
+            background: checkInSubmittedToday ? 'rgba(61,155,107,0.08)' : tokens.color.brandGradient,
             border: checkInSubmittedToday ? '1px solid rgba(61,155,107,0.18)' : 'none',
             borderRadius: tokens.radius.full,
             color: checkInSubmittedToday ? tokens.color.statusMaintain : '#fff',
             fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.space.sm,
             fontFamily: tokens.font.family,
-            boxShadow: checkInSubmittedToday ? 'none' : '0 2px 12px rgba(61,155,107,0.22)',
+            boxShadow: checkInSubmittedToday ? 'none' : tokens.color.brandShadow,
           }}
         >
           <Icon icon="ph:pencil-simple" width={16} />

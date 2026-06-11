@@ -19,8 +19,8 @@ type OutcomeValue = 'Easier' | 'AsExpected' | 'Harder';
 
 const outcomeConfig: { value: OutcomeValue; label: string; icon: string; color: string; bg: string }[] = [
   { value: 'Easier', label: S.sessionEasier, icon: 'ph:arrow-down-left', color: '#2060A0', bg: 'rgba(45,123,184,0.08)' },
-  { value: 'AsExpected', label: S.sessionAsExpected, icon: 'ph:equals', color: '#2D7A52', bg: 'rgba(61,155,107,0.08)' },
-  { value: 'Harder', label: S.sessionHarder, icon: 'ph:arrow-up-right', color: '#B07A10', bg: 'rgba(181,134,10,0.10)' },
+  { value: 'AsExpected', label: S.sessionAsExpected, icon: 'ph:equals', color: tokens.color.statusMaintain, bg: 'rgba(61,155,107,0.08)' },
+  { value: 'Harder', label: S.sessionHarder, icon: 'ph:arrow-up-right', color: tokens.color.statusReduce, bg: 'rgba(181,134,10,0.10)' },
 ];
 
 export default function SessionOutcomeCapture({ athleteName, loadScore, onSubmit, onBack }: Props) {
@@ -143,9 +143,9 @@ export default function SessionOutcomeCapture({ athleteName, loadScore, onSubmit
                 style={{
                   padding: '6px 14px',
                   borderRadius: tokens.radius.full,
-                  border: `1.5px solid ${reflections.includes(tag) ? '#B07A10' : 'rgba(0,0,0,0.08)'}`,
+                  border: `1.5px solid ${reflections.includes(tag) ? tokens.color.statusReduce : 'rgba(0,0,0,0.08)'}`,
                   background: reflections.includes(tag) ? 'rgba(181,134,10,0.08)' : 'rgba(255,255,255,0.70)',
-                  color: reflections.includes(tag) ? '#96680A' : tokens.color.textSecondary,
+                  color: reflections.includes(tag) ? tokens.color.statusAttention : tokens.color.textSecondary,
                   fontSize: tokens.font.sm,
                   fontWeight: reflections.includes(tag) ? tokens.font.semibold : tokens.font.regular,
                   cursor: 'pointer', fontFamily: tokens.font.family,
@@ -164,13 +164,13 @@ export default function SessionOutcomeCapture({ athleteName, loadScore, onSubmit
         disabled={!selected}
         style={{
           width: '100%', padding: `${tokens.space.md} ${tokens.space.xl}`,
-          background: selected ? 'linear-gradient(135deg, #3D9B6B 0%, #4FA3C7 100%)' : 'rgba(0,0,0,0.08)',
+          background: selected ? tokens.color.brandGradient : 'rgba(0,0,0,0.08)',
           border: 'none', borderRadius: tokens.radius.full,
           color: selected ? '#fff' : tokens.color.textMuted,
           fontSize: tokens.font.md, fontWeight: tokens.font.semibold,
           cursor: selected ? 'pointer' : 'not-allowed',
           fontFamily: tokens.font.family,
-          boxShadow: selected ? '0 2px 12px rgba(61,155,107,0.22)' : 'none',
+          boxShadow: selected ? tokens.color.brandShadow : 'none',
         }}
       >
         {S.sessionSubmit}
