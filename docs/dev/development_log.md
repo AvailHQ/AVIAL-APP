@@ -35,3 +35,4 @@ This is a recent-log check, not a full project audit.
 - 2026-06-11 cc: Add docs/pages/ PRD documents for all 9 pages (Login + 5 athlete + 3 coach), written retroactively against the implemented prototype.
 - 2026-06-11 cc: Re-review prototype against review_checklist, product boundaries, privacy, and copy rules — findings recorded in review output (no P1 privacy leaks; P2/P3 copy-token findings open).
 - 2026-06-11 cc: Fix review P2-1 — move hardcoded pending-check-in athlete id out of utils/coachView.ts into mockData PENDING_CHECK_IN_IDS, passed as a buildCoachView parameter; verified in browser, behaviour unchanged.
+- 2026-06-11 cc: Fix review P2-2 — replace aisha-okafor placeholder LoadScore (value 0, empty label) with complete realistic mock data; verified in browser: coach still sees Context Unavailable while consent off, her own dashboard renders fully, and consent-on immediately shows valid context to coach.
