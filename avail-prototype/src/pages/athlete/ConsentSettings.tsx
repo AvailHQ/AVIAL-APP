@@ -3,10 +3,10 @@ import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
 import type { ConsentState } from '../../types';
-import PageWrapper from '../shared/PageWrapper';
-import Card from '../shared/Card';
-import BackButton from '../shared/BackButton';
-import ToggleSwitch from '../shared/ToggleSwitch';
+import PageWrapper from '../../components/shared/PageWrapper';
+import Card from '../../components/shared/Card';
+import BackButton from '../../components/shared/BackButton';
+import ToggleSwitch from '../../components/shared/ToggleSwitch';
 
 interface Props {
   athleteName: string;

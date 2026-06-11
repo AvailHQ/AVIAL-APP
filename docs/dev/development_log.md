@@ -30,3 +30,7 @@ This is a recent-log check, not a full project audit.
 - 2026-06-05 cc: Add Avatar component with squad.jpg sprite support; update all avatar rendering across Login, coach components, and dashboard.
 - 2026-06-06 cc: Fix avatar filename to squad.png; switch from CSS sprite to individual cropped images per athlete using sips; Avatar component updated to use object-fit img approach for accurate face centering.
 - 2026-06-06 cc: Fix avatar face alignment — tighter sips crop (6% padding), objectPosition changed to center 20% to focus on face area.
+- 2026-06-06 Human: Revert avatars to single squad.png with per-athlete AvatarCrop coordinates; delete individual cropped pngs (commits "update", "detlet", "profile" — logged retroactively).
+- 2026-06-11 cc: Move 8 page components from components/{athlete,coach}/ to pages/{athlete,coach}/ to match code_maintenance_rules.md; update all imports; build passes.
+- 2026-06-11 cc: Add docs/pages/ PRD documents for all 9 pages (Login + 5 athlete + 3 coach), written retroactively against the implemented prototype.
+- 2026-06-11 cc: Re-review prototype against review_checklist, product boundaries, privacy, and copy rules — findings recorded in review output (no P1 privacy leaks; P2/P3 copy-token findings open).

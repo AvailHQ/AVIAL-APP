@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
-import Avatar from '../shared/Avatar';
+import Avatar from '../../components/shared/Avatar';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
 import type { CoachAthleteView, DifferentDecision } from '../../types';
-import PageWrapper from '../shared/PageWrapper';
-import BackButton from '../shared/BackButton';
-import Card from '../shared/Card';
-import { DirectionBadge, ConfidenceBadge, TrendBadge } from '../shared/Badge';
-import LoadScoreRing from '../shared/LoadScoreRing';
-import TrendChart from '../shared/TrendChart';
-import ContextDimensionsPanel from '../shared/ContextDimensionsPanel';
+import PageWrapper from '../../components/shared/PageWrapper';
+import BackButton from '../../components/shared/BackButton';
+import Card from '../../components/shared/Card';
+import { DirectionBadge, ConfidenceBadge, TrendBadge } from '../../components/shared/Badge';
+import LoadScoreRing from '../../components/shared/LoadScoreRing';
+import TrendChart from '../../components/shared/TrendChart';
+import ContextDimensionsPanel from '../../components/shared/ContextDimensionsPanel';
 
 interface Props {
   athlete: CoachAthleteView;

@@ -6,14 +6,14 @@ import { tokens } from './tokens';
 import { S } from './strings';
 
 import Login from './pages/Login';
-import OnboardingFlow from './components/athlete/OnboardingFlow';
-import AthleteDashboard from './components/athlete/AthleteDashboard';
-import DailyCheckIn from './components/athlete/DailyCheckIn';
-import SessionOutcomeCapture from './components/athlete/SessionOutcomeCapture';
-import ConsentSettings from './components/athlete/ConsentSettings';
-import CoachDashboard from './components/coach/CoachDashboard';
-import CoachAthleteDetail from './components/coach/CoachAthleteDetail';
-import DifferentDecisionFlow from './components/coach/DifferentDecisionFlow';
+import OnboardingFlow from './pages/athlete/OnboardingFlow';
+import AthleteDashboard from './pages/athlete/AthleteDashboard';
+import DailyCheckIn from './pages/athlete/DailyCheckIn';
+import SessionOutcomeCapture from './pages/athlete/SessionOutcomeCapture';
+import ConsentSettings from './pages/athlete/ConsentSettings';
+import CoachDashboard from './pages/coach/CoachDashboard';
+import CoachAthleteDetail from './pages/coach/CoachAthleteDetail';
+import DifferentDecisionFlow from './pages/coach/DifferentDecisionFlow';
 
 const initialState: AppState = {
   currentView: 'role-select',

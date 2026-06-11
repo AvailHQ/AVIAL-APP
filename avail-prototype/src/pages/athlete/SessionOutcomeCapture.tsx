@@ -3,10 +3,10 @@ import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
 import type { LoadScore, SessionOutcome } from '../../types';
-import PageWrapper from '../shared/PageWrapper';
-import Card from '../shared/Card';
-import BackButton from '../shared/BackButton';
-import { DirectionBadge } from '../shared/Badge';
+import PageWrapper from '../../components/shared/PageWrapper';
+import Card from '../../components/shared/Card';
+import BackButton from '../../components/shared/BackButton';
+import { DirectionBadge } from '../../components/shared/Badge';
 
 interface Props {
   athleteName: string;

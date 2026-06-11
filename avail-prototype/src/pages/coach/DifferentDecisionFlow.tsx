@@ -3,10 +3,10 @@ import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
 import type { CoachAthleteView, DifferentDecision, DifferentDecisionReason } from '../../types';
-import PageWrapper from '../shared/PageWrapper';
-import BackButton from '../shared/BackButton';
-import Card from '../shared/Card';
-import { DirectionBadge } from '../shared/Badge';
+import PageWrapper from '../../components/shared/PageWrapper';
+import BackButton from '../../components/shared/BackButton';
+import Card from '../../components/shared/Card';
+import { DirectionBadge } from '../../components/shared/Badge';
 
 interface Props {
   athlete: CoachAthleteView;

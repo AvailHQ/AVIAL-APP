@@ -20,11 +20,12 @@ Completed:
 - `docs/dev/agent_skill_usage.md`
 - `docs/dev/skill_roadmap.md`
 - `avail-product-reviewer` skill
+- `docs/dev/code_maintenance_rules.md`
+- `docs/dev/review_checklist.md`
+- `docs/pages/` per-page PRD documents
 
 Still useful to add:
 
-- `docs/dev/code_maintenance_rules.md`
-- `docs/dev/review_checklist.md`
 - `docs/dev/frontend_architecture_rules.md`
 
 Acceptance criteria:

@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
-import PageWrapper from '../shared/PageWrapper';
-import ProgressBar from '../shared/ProgressBar';
-import type { OnboardingData } from './onboarding/OnboardingTypes';
-import OnboardingWelcome from './onboarding/OnboardingWelcome';
-import OnboardingCycle from './onboarding/OnboardingCycle';
-import OnboardingTraining from './onboarding/OnboardingTraining';
-import OnboardingSleep from './onboarding/OnboardingSleep';
-import OnboardingConfirm from './onboarding/OnboardingConfirm';
+import PageWrapper from '../../components/shared/PageWrapper';
+import ProgressBar from '../../components/shared/ProgressBar';
+import type { OnboardingData } from '../../components/athlete/onboarding/OnboardingTypes';
+import OnboardingWelcome from '../../components/athlete/onboarding/OnboardingWelcome';
+import OnboardingCycle from '../../components/athlete/onboarding/OnboardingCycle';
+import OnboardingTraining from '../../components/athlete/onboarding/OnboardingTraining';
+import OnboardingSleep from '../../components/athlete/onboarding/OnboardingSleep';
+import OnboardingConfirm from '../../components/athlete/onboarding/OnboardingConfirm';
 
 interface Props {
   athleteName: string;

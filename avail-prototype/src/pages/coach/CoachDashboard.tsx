@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { tokens, directionColors } from '../../tokens';
-import Avatar from '../shared/Avatar';
+import Avatar from '../../components/shared/Avatar';
 import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
-import PageWrapper from '../shared/PageWrapper';
-import BackButton from '../shared/BackButton';
-import PrioritySection from './PrioritySection';
-import AthleteCard from './AthleteCard';
+import PageWrapper from '../../components/shared/PageWrapper';
+import BackButton from '../../components/shared/BackButton';
+import PrioritySection from '../../components/coach/PrioritySection';
+import AthleteCard from '../../components/coach/AthleteCard';
 
 interface Props {
   athletes: CoachAthleteView[];
