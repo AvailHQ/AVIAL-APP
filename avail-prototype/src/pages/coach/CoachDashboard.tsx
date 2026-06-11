@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { tokens, directionColors } from '../../tokens';
+import { tokens, directionColors, confidenceColor } from '../../tokens';
 import Avatar from '../../components/shared/Avatar';
 import { S } from '../../strings';
 import type { CoachAthleteView } from '../../types';
@@ -146,18 +146,24 @@ function SquadOverviewRow({ athlete }: OverviewRowProps) {
         )}
       </div>
 
-      {/* Score / state label */}
+      {/* Score / state label — confidence must accompany the score */}
       <div style={{
         width: '72px', flexShrink: 0, textAlign: 'right',
         fontSize: tokens.font.xs, fontWeight: tokens.font.semibold,
         color: hasScore ? barColor : tokens.color.textMuted,
       }}>
-        {hasScore
-          ? athlete.loadScore
-          : isPending
-          ? 'Pending'
-          : '—'
-        }
+        {hasScore ? (
+          <>
+            <div>{athlete.loadScore}</div>
+            <div style={{
+              fontSize: '10px',
+              fontWeight: tokens.font.medium,
+              color: confidenceColor(athlete.confidence),
+            }}>
+              {athlete.confidence}
+            </div>
+          </>
+        ) : isPending ? 'Pending' : '—'}
       </div>
     </div>
   );
