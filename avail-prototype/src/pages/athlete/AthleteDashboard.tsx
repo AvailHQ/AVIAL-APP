@@ -31,13 +31,13 @@ export default function AthleteDashboard({
 }: Props) {
   const firstName = athlete.name.split(' ')[0];
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = hour < 12 ? S.greetingMorning : hour < 18 ? S.greetingAfternoon : S.greetingEvening;
   const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 
   return (
     <PageWrapper maxWidth="480px">
       <div style={{ marginBottom: tokens.space.lg }}>
-        <BackButton onClick={onBack} label="Switch role" />
+        <BackButton onClick={onBack} label={S.switchRole} />
       </div>
 
       {/* Greeting */}

@@ -51,7 +51,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
           <Card style={{ padding: tokens.space.lg }}>
             <div style={{ marginBottom: tokens.space.md }}>
               <div style={{ fontSize: tokens.font.sm, color: tokens.color.textMuted, fontWeight: tokens.font.medium, marginBottom: tokens.space.sm, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Athlete
+                {S.loginAthleteSection}
               </div>
               <button
                 onClick={() => setShowAthleteList(!showAthleteList)}
@@ -149,7 +149,7 @@ export default function RoleSelect({ athletes, activeAthleteId, onAthleteSelect,
           <Card style={{ padding: tokens.space.lg }}>
             <div style={{ marginBottom: tokens.space.md }}>
               <div style={{ fontSize: tokens.font.sm, color: tokens.color.textMuted, fontWeight: tokens.font.medium, marginBottom: tokens.space.xs, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Coach
+                {S.loginCoachSection}
               </div>
               <div style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>
                 {S.roleCoachDesc}

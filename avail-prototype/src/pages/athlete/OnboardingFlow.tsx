@@ -47,7 +47,7 @@ export default function OnboardingFlow({ athleteName, onComplete, onBack }: Prop
           onBlur={e => { e.currentTarget.style.opacity = '1'; }}
         >
           <Icon icon="ph:arrow-left" width={16} />
-          {step === 0 ? 'Back' : S.onboardingBack}
+          {S.onboardingBack}
         </button>
         <ProgressBar steps={TOTAL_STEPS} current={step} />
         <div style={{ marginTop: tokens.space.xs, fontSize: tokens.font.xs, color: tokens.color.textMuted }}>

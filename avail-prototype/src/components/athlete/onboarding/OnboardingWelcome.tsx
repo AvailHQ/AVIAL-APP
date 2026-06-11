@@ -18,9 +18,9 @@ export default function OnboardingWelcome({ firstName: _firstName, onNext }: Pro
       </div>
       <div style={{ display: 'flex', gap: tokens.space.md, flexWrap: 'wrap', marginBottom: tokens.space['2xl'] }}>
         {[
-          { icon: 'ph:chart-line-up', label: 'Physiological context' },
-          { icon: 'ph:lock-simple', label: 'Your data stays yours' },
-          { icon: 'ph:arrow-circle-right', label: 'Adapts over time' },
+          { icon: 'ph:chart-line-up', label: S.onboardingWelcomePills[0] },
+          { icon: 'ph:lock-simple', label: S.onboardingWelcomePills[1] },
+          { icon: 'ph:arrow-circle-right', label: S.onboardingWelcomePills[2] },
         ].map(item => (
           <div key={item.label} style={{
             display: 'flex', alignItems: 'center', gap: '6px',

@@ -1,12 +1,13 @@
 import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
+import { S } from '../../strings';
 
 interface BackButtonProps {
   onClick: () => void;
   label?: string;
 }
 
-export default function BackButton({ onClick, label = 'Back' }: BackButtonProps) {
+export default function BackButton({ onClick, label = S.back }: BackButtonProps) {
   return (
     <button
       onClick={onClick}

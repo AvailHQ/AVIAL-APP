@@ -80,7 +80,7 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
           border: '1px solid rgba(154,163,173,0.15)',
           whiteSpace: 'nowrap',
         }}>
-          Context unavailable
+          {S.contextUnavailable}
         </span>
       )}
 
@@ -95,7 +95,7 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
           background: tokens.color.statusIncreaseBg,
           whiteSpace: 'nowrap',
         }}>
-          Pending check-in
+          {S.pendingCheckInBadge}
         </span>
       )}
 

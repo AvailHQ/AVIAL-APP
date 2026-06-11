@@ -88,13 +88,13 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.space.sm }}>
           {[
-            { label: 'Load Score', icon: 'ph:gauge', visible: sharing },
-            { label: 'Load direction', icon: 'ph:arrow-right', visible: sharing },
-            { label: 'Confidence level', icon: 'ph:chart-bar', visible: sharing },
-            { label: 'High-level trend', icon: 'ph:chart-line-up', visible: sharing },
-            { label: 'Check-in details', icon: 'ph:note', visible: false },
-            { label: 'Cycle logs', icon: 'ph:calendar', visible: false },
-            { label: 'Personal reflections', icon: 'ph:chat-text', visible: false },
+            { label: S.consentItemLoadScore, icon: 'ph:gauge', visible: sharing },
+            { label: S.consentItemDirection, icon: 'ph:arrow-right', visible: sharing },
+            { label: S.consentItemConfidence, icon: 'ph:chart-bar', visible: sharing },
+            { label: S.consentItemTrend, icon: 'ph:chart-line-up', visible: sharing },
+            { label: S.consentItemCheckIns, icon: 'ph:note', visible: false },
+            { label: S.consentItemCycleLogs, icon: 'ph:calendar', visible: false },
+            { label: S.consentItemReflections, icon: 'ph:chat-text', visible: false },
           ].map(item => (
             <div key={item.label} style={{
               display: 'flex', alignItems: 'center', gap: tokens.space.md,
@@ -112,7 +112,7 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
                 color: (item.visible && sharing) ? tokens.color.statusMaintain : tokens.color.textMuted,
                 fontWeight: tokens.font.medium,
               }}>
-                {item.visible && sharing ? 'Visible' : item.visible ? 'Hidden' : 'Never shared'}
+                {item.visible && sharing ? S.consentVisible : item.visible ? S.consentHidden : S.consentNeverShared}
               </span>
             </div>
           ))}

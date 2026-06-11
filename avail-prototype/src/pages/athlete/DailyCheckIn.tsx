@@ -59,32 +59,32 @@ export default function DailyCheckIn({ athleteName, onSubmit, onBack }: Props) {
           label={S.checkInSleepLabel}
           value={sleepQuality}
           onChange={setSleepQuality}
-          lowLabel="Difficult"
-          highLabel="Restful"
+          lowLabel={S.checkInSleepLow}
+          highLabel={S.checkInSleepHigh}
           icon={<Icon icon="ph:moon" width={16} />}
         />
         <Slider
           label={S.checkInFatigueLabel}
           value={fatigue}
           onChange={setFatigue}
-          lowLabel="Very tired"
-          highLabel="Full of energy"
+          lowLabel={S.checkInFatigueLow}
+          highLabel={S.checkInFatigueHigh}
           icon={<Icon icon="ph:lightning" width={16} />}
         />
         <Slider
           label={S.checkInSorenessLabel}
           value={soreness}
           onChange={setSoreness}
-          lowLabel="Very sore"
-          highLabel="Feeling good"
+          lowLabel={S.checkInSorenessLow}
+          highLabel={S.checkInSorenessHigh}
           icon={<Icon icon="ph:heartbeat" width={16} />}
         />
         <Slider
           label={S.checkInMentalLabel}
           value={mentalReadiness}
           onChange={setMentalReadiness}
-          lowLabel="Low"
-          highLabel="High"
+          lowLabel={S.checkInMentalLow}
+          highLabel={S.checkInMentalHigh}
           icon={<Icon icon="ph:brain" width={16} />}
         />
       </Card>

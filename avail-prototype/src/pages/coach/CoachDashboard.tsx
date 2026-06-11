@@ -163,7 +163,7 @@ function SquadOverviewRow({ athlete }: OverviewRowProps) {
               {athlete.confidence}
             </div>
           </>
-        ) : isPending ? 'Pending' : '—'}
+        ) : isPending ? S.pendingShort : '—'}
       </div>
     </div>
   );
@@ -223,7 +223,7 @@ export default function CoachDashboard({ athletes, onSelectAthlete, onBack }: Pr
   return (
     <PageWrapper maxWidth="680px" paddingBottom="80px">
       <div style={{ marginBottom: tokens.space.lg }}>
-        <BackButton onClick={onBack} label="Switch role" />
+        <BackButton onClick={onBack} label={S.switchRole} />
       </div>
 
       {/* Header */}
@@ -274,14 +274,14 @@ export default function CoachDashboard({ athletes, onSelectAthlete, onBack }: Pr
           <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.sm }}>
             <Icon icon="ph:chart-bar-horizontal" width={16} color={tokens.color.textSecondary} />
             <span style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary }}>
-              Squad Load Overview
+              {S.squadOverviewHeading}
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.sm }}>
             {[
-              { color: tokens.color.statusMaintain, label: 'Maintain' },
-              { color: tokens.color.statusReduce, label: 'Reduce' },
-              { color: tokens.color.statusRecovery, label: 'Recovery' },
+              { color: tokens.color.statusMaintain, label: S.legendMaintain },
+              { color: tokens.color.statusReduce, label: S.legendReduce },
+              { color: tokens.color.statusRecovery, label: S.legendRecovery },
             ].map(l => (
               <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color, opacity: 0.75 }} />
@@ -328,7 +328,7 @@ export default function CoachDashboard({ athletes, onSelectAthlete, onBack }: Pr
           color: tokens.color.textMuted,
           textTransform: 'uppercase', letterSpacing: '0.08em',
         }}>
-          Squad
+          {S.squadSectionLabel}
         </span>
         <div style={{
           display: 'flex',
@@ -374,13 +374,13 @@ export default function CoachDashboard({ athletes, onSelectAthlete, onBack }: Pr
               @media (max-width: 540px) { .coach-col-headers { display: none !important; } }
             `}</style>
             <div style={{ flex: 1, paddingLeft: '52px', fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em' }}>
-              Athlete
+              {S.colAthlete}
             </div>
             <div style={{ display: 'flex', gap: tokens.space.md, flexShrink: 0 }}>
-              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '32px', textAlign: 'right' }}>Score</span>
-              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '80px' }}>Context</span>
-              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '64px' }}>Confidence</span>
-              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '72px' }}>Trend</span>
+              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '32px', textAlign: 'right' }}>{S.colScore}</span>
+              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '80px' }}>{S.colContext}</span>
+              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '64px' }}>{S.colConfidence}</span>
+              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, fontWeight: tokens.font.semibold, textTransform: 'uppercase', letterSpacing: '0.07em', minWidth: '72px' }}>{S.colTrend}</span>
             </div>
             <div style={{ width: '14px' }} />
           </div>

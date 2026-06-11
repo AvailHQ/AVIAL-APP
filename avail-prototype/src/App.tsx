@@ -230,7 +230,7 @@ export default function App() {
         zIndex: 1000,
       }}>
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          {S.appName} Prototype
+          {S.appName} {S.demoBarPrototype}
         </span>
         <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '11px' }}>·</span>
         <button
@@ -241,13 +241,13 @@ export default function App() {
             borderRadius: '4px',
           }}
         >
-          ← Role Select
+          {S.demoBarRoleSelect}
         </button>
         {(currentView === 'athlete-dashboard' || currentView === 'daily-checkin' || currentView === 'session-outcome' || currentView === 'consent-settings') && (
           <>
             <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '11px' }}>·</span>
             <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>
-              Viewing as: {activeAthlete.name}
+              {S.demoBarViewingAs} {activeAthlete.name}
             </span>
           </>
         )}

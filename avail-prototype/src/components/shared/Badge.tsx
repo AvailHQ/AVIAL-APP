@@ -1,4 +1,5 @@
 import { tokens, directionColors, confidenceColor, trendColor } from '../../tokens';
+import { S } from '../../strings';
 import type { Direction, Confidence, Trend } from '../../types';
 
 interface BadgeProps {
@@ -31,13 +32,12 @@ export function Badge({ label, color, bg, size = 'md', style }: BadgeProps) {
 
 export function DirectionBadge({ direction, size }: { direction: Direction | null; size?: 'sm' | 'md' }) {
   const c = directionColors(direction);
-  const label = direction ? `Context suggests: ${direction}` : 'Context unavailable';
-  return <Badge label={label} color={c.text} bg={c.bg} size={size} />;
+  return <Badge label={S.directionLabel(direction)} color={c.text} bg={c.bg} size={size} />;
 }
 
 export function ConfidenceBadge({ confidence, size }: { confidence: Confidence | null; size?: 'sm' | 'md' }) {
   const color = confidenceColor(confidence);
-  const label = confidence ? `Confidence: ${confidence}` : 'Confidence unavailable';
+  const label = S.confidence(confidence);
   return (
     <Badge
       label={label}

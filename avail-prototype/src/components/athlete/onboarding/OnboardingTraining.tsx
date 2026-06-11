@@ -10,10 +10,10 @@ interface Props {
 }
 
 const TRAINING_OPTIONS: { value: TrainingLevel; label: string }[] = [
-  { value: 'Recreational', label: 'Recreational' },
-  { value: 'Club', label: 'Club level' },
-  { value: 'Semi-Pro', label: 'Semi-professional' },
-  { value: 'Elite', label: 'Professional / Elite' },
+  { value: 'Recreational', label: S.onboardingTrainingRecreational },
+  { value: 'Club', label: S.onboardingTrainingClub },
+  { value: 'Semi-Pro', label: S.onboardingTrainingSemiPro },
+  { value: 'Elite', label: S.onboardingTrainingElite },
 ];
 
 const INJURY_OPTIONS = [

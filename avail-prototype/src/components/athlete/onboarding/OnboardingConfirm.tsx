@@ -11,14 +11,14 @@ interface Props {
 
 export default function OnboardingConfirm({ data, onComplete }: Props) {
   const cycleDisplay =
-    data.cycleRegularity === 'HormonalContraception' ? 'Hormonal contraception' :
-    data.cycleRegularity === 'PreferNotToSay' ? 'Not shared' :
+    data.cycleRegularity === 'HormonalContraception' ? S.onboardingConfirmHCDisplay :
+    data.cycleRegularity === 'PreferNotToSay' ? S.onboardingConfirmNotShared :
     data.cycleRegularity ?? '—';
 
   const summaryRows = [
-    { icon: 'ph:calendar', label: 'Cycle context', value: cycleDisplay },
-    { icon: 'ph:barbell', label: 'Training level', value: data.trainingLevel ?? '—' },
-    { icon: 'ph:moon', label: 'Sleep pattern', value: data.sleepConsistency ?? '—' },
+    { icon: 'ph:calendar', label: S.onboardingConfirmCycleLabel, value: cycleDisplay },
+    { icon: 'ph:barbell', label: S.onboardingTrainingLevelLabel, value: data.trainingLevel ?? '—' },
+    { icon: 'ph:moon', label: S.onboardingConfirmSleepLabel, value: data.sleepConsistency ?? '—' },
   ];
 
   return (

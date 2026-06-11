@@ -183,7 +183,7 @@ export default function AthleteCard({ athlete, onClick }: Props) {
           borderRadius: tokens.radius.full,
           fontWeight: tokens.font.medium,
         }}>
-          Pending check-in
+          {S.pendingCheckInBadge}
         </div>
       )}
 

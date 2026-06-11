@@ -10,10 +10,10 @@ interface Props {
 }
 
 const SLEEP_HOURS: { label: string; value: number }[] = [
-  { label: 'Less than 6', value: 1 },
-  { label: '6–7 hours', value: 2 },
-  { label: '7–8 hours', value: 3 },
-  { label: '8+ hours', value: 4 },
+  { label: S.onboardingSleepHoursOptions[0], value: 1 },
+  { label: S.onboardingSleepHoursOptions[1], value: 2 },
+  { label: S.onboardingSleepHoursOptions[2], value: 3 },
+  { label: S.onboardingSleepHoursOptions[3], value: 4 },
 ];
 
 const CONSISTENCY_OPTIONS: SleepConsistency[] = ['Pretty consistent', 'Varies a lot', 'Hard to say'];

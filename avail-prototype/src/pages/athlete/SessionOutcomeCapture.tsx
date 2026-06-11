@@ -91,7 +91,7 @@ export default function SessionOutcomeCapture({ athleteName, loadScore, onSubmit
           {S.sessionHeading}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.sm, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>Today's context suggested:</span>
+          <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>{S.todaysContextSuggested}</span>
           <DirectionBadge direction={loadScore.direction} size="sm" />
         </div>
       </div>

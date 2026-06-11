@@ -10,9 +10,9 @@ interface Props {
 }
 
 const CYCLE_OPTIONS: { value: CycleOption; label: string; icon: string }[] = [
-  { value: 'Regular', label: 'Generally regular', icon: 'ph:calendar-check' },
-  { value: 'Irregular', label: 'Varies quite a bit', icon: 'ph:calendar-dots' },
-  { value: 'HormonalContraception', label: 'I use hormonal contraception', icon: 'ph:first-aid' },
+  { value: 'Regular', label: S.onboardingCycleRegular, icon: 'ph:calendar-check' },
+  { value: 'Irregular', label: S.onboardingCycleIrregular, icon: 'ph:calendar-dots' },
+  { value: 'HormonalContraception', label: S.onboardingCycleHC, icon: 'ph:first-aid' },
   { value: 'PreferNotToSay', label: S.onboardingSkip, icon: 'ph:eye-slash' },
 ];
 

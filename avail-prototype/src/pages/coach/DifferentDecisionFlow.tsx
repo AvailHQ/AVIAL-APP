@@ -98,7 +98,7 @@ export default function DifferentDecisionFlow({ athlete, onSubmit, onBack }: Pro
         </div>
         {athlete.direction && (
           <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.sm, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>Today's context suggested:</span>
+            <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary }}>{S.todaysContextSuggested}</span>
             <DirectionBadge direction={athlete.direction} size="sm" />
           </div>
         )}

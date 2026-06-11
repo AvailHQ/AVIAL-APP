@@ -47,7 +47,6 @@ export const S = {
 
   // Session outcome
   sessionHeading: "How did today's session feel?",
-  sessionSubheading: (direction: string) => `Today's context suggested: ${direction}`,
   sessionEasier: "Easier than expected",
   sessionAsExpected: "About as expected",
   sessionHarder: "Harder than expected",
@@ -88,8 +87,6 @@ export const S = {
 
   // Different decision flow
   differentDecisionHeading: "I'm making a different decision",
-  differentDecisionSubheading: (direction: string) =>
-    `Today's context suggested: ${direction}. You're choosing a different approach.`,
   differentDecisionReasonLabel: "What's your reason?",
   differentDecisionNotesLabel: "Add any operational context (optional)",
   differentDecisionNotesPlaceholder: "e.g. Tactical requirements, player feedback, squad constraints…",
@@ -145,4 +142,76 @@ export const S = {
   onboardingBack: "Back",
   onboardingNext: "Continue",
   onboardingSkip: "Prefer not to say",
+
+  // Shared navigation chrome
+  back: "Back",
+  switchRole: "Switch role",
+
+  // Greetings
+  greetingMorning: "Good morning",
+  greetingAfternoon: "Good afternoon",
+  greetingEvening: "Good evening",
+
+  // Shared context labels
+  todaysContextSuggested: "Today's context suggested:",
+  pendingCheckInBadge: "Pending check-in",
+  pendingShort: "Pending",
+
+  // Login section labels
+  loginAthleteSection: "Athlete",
+  loginCoachSection: "Coach",
+
+  // Check-in slider scale labels
+  checkInSleepLow: "Difficult",
+  checkInSleepHigh: "Restful",
+  checkInFatigueLow: "Very tired",
+  checkInFatigueHigh: "Full of energy",
+  checkInSorenessLow: "Very sore",
+  checkInSorenessHigh: "Feeling good",
+  checkInMentalLow: "Low",
+  checkInMentalHigh: "High",
+
+  // Consent visibility list
+  consentItemLoadScore: "Load Score",
+  consentItemDirection: "Load direction",
+  consentItemConfidence: "Confidence level",
+  consentItemTrend: "High-level trend",
+  consentItemCheckIns: "Check-in details",
+  consentItemCycleLogs: "Cycle logs",
+  consentItemReflections: "Personal reflections",
+  consentVisible: "Visible",
+  consentHidden: "Hidden",
+  consentNeverShared: "Never shared",
+
+  // Coach dashboard chart and table
+  squadOverviewHeading: "Squad Load Overview",
+  squadSectionLabel: "Squad",
+  legendMaintain: "Maintain",
+  legendReduce: "Reduce",
+  legendRecovery: "Recovery",
+  colAthlete: "Athlete",
+  colScore: "Score",
+  colContext: "Context",
+  colConfidence: "Confidence",
+  colTrend: "Trend",
+
+  // Onboarding option labels
+  onboardingCycleRegular: "Generally regular",
+  onboardingCycleIrregular: "Varies quite a bit",
+  onboardingCycleHC: "I use hormonal contraception",
+  onboardingTrainingRecreational: "Recreational",
+  onboardingTrainingClub: "Club level",
+  onboardingTrainingSemiPro: "Semi-professional",
+  onboardingTrainingElite: "Professional / Elite",
+  onboardingSleepHoursOptions: ["Less than 6", "6–7 hours", "7–8 hours", "8+ hours"],
+  onboardingWelcomePills: ["Physiological context", "Your data stays yours", "Adapts over time"],
+  onboardingConfirmCycleLabel: "Cycle context",
+  onboardingConfirmSleepLabel: "Sleep pattern",
+  onboardingConfirmHCDisplay: "Hormonal contraception",
+  onboardingConfirmNotShared: "Not shared",
+
+  // Demo info bar
+  demoBarPrototype: "Prototype",
+  demoBarRoleSelect: "← Role Select",
+  demoBarViewingAs: "Viewing as:",
 } as const;
