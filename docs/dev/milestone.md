@@ -4,7 +4,7 @@ This file tracks the staged development plan from pure frontend prototype to pil
 
 ## Milestone 0 - Guardrails
 
-Status: in progress
+Status: complete (2026-06-11; frontend_architecture_rules.md is a living draft that grows at Milestone 3)
 
 Goal: document the product, privacy, language, review, and skill rules that keep AVAIL aligned.
 
@@ -23,10 +23,7 @@ Completed:
 - `docs/dev/code_maintenance_rules.md`
 - `docs/dev/review_checklist.md`
 - `docs/pages/` per-page PRD documents
-
-Still useful to add:
-
-- `docs/dev/frontend_architecture_rules.md`
+- `docs/dev/frontend_architecture_rules.md` (draft — decisions land at Milestone 3)
 
 Acceptance criteria:
 
@@ -38,7 +35,7 @@ Acceptance criteria:
 
 ## Milestone 1 - Pure Frontend Prototype
 
-Status: active
+Status: complete (2026-06-11)
 
 Goal: build a polished React-only prototype demonstrating athlete and coach workflows with mock data.
 
@@ -84,7 +81,7 @@ Recommended review skills:
 
 ## Milestone 2 - Prototype Hardening
 
-Status: next
+Status: complete (2026-06-11)
 
 Goal: improve prototype quality for founder review, early athlete feedback, and coach walkthroughs.
 
@@ -110,7 +107,7 @@ Acceptance criteria:
 
 ## Milestone 3 - Frontend Architecture Decision
 
-Status: planned
+Status: next
 
 Goal: decide the next frontend target and architecture.
 

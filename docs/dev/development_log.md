@@ -42,3 +42,7 @@ This is a recent-log check, not a full project audit.
 - 2026-06-11 cc: Fix review P3-2 — rename internal injury* identifiers (injuryHistory, onboardingInjury* keys, INJURY_OPTIONS) to physicalHistory* so banned-term scans need no exemptions; user-visible copy unchanged.
 - 2026-06-11 cc: Fix review P3-3 — drop chloe-williams duplicate avatarCrop (was identical to maya-chen); she now falls back to the initials avatar (squad.png has 6 faces for 7 athletes).
 - 2026-06-11 cc: Fix review P3-4 — extract MetricCard and SquadOverviewRow from CoachDashboard into components/coach/ (414→266 lines); verified in browser, no visual change.
+- 2026-06-11 Human+cc: Decide coach navigation stays single-column in prototype; sidebar/top-nav deferred to real product with concrete triggers. Record as Decision 1 in new docs/dev/frontend_architecture_rules.md (draft) — last missing Milestone 0 doc now exists.
+- 2026-06-11 cc: M2 hardening — convert ToggleSwitch to button with role=switch/aria-checked and focus ring; verified focus, real-click toggle, and coach-view effect in browser.
+- 2026-06-11 cc: M2 hardening — mobile walkthrough at 375px across all screens; fix AthleteListRow overflow (badges wrap to second line under 540px) and hide squeezed chart scale labels on narrow screens; all pages now fit without horizontal scroll.
+- 2026-06-11 cc: M2 hardening — confirm .gitignore covers dist/node_modules/env/logs and git index contains no generated files. Mark Milestones 0, 1, 2 complete in milestone.md; M3 is next.

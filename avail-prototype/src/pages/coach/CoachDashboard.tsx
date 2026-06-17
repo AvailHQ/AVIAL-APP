@@ -137,13 +137,19 @@ export default function CoachDashboard({ athletes, onSelectAthlete, onBack }: Pr
           </div>
         </div>
 
-        {/* Scale labels */}
-        <div style={{
-          display: 'flex',
-          paddingLeft: '152px',
-          paddingRight: '80px',
-          marginBottom: tokens.space.xs,
-        }}>
+        {/* Scale labels — hidden on narrow screens where the axis has no room */}
+        <div
+          className="squad-scale-labels"
+          style={{
+            display: 'flex',
+            paddingLeft: '152px',
+            paddingRight: '80px',
+            marginBottom: tokens.space.xs,
+          }}
+        >
+          <style>{`
+            @media (max-width: 540px) { .squad-scale-labels { display: none !important; } }
+          `}</style>
           {[0, 25, 50, 75, 100].map(n => (
             <div key={n} style={{
               flex: n === 0 ? 0 : 1,

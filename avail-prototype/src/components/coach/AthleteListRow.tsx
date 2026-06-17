@@ -32,6 +32,7 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
       style={{
         display: 'flex',
         alignItems: 'center',
+        flexWrap: 'wrap',
         gap: tokens.space.md,
         padding: `${tokens.space.md} ${tokens.space.lg}`,
         background: hovered ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.60)',
@@ -99,9 +100,21 @@ export default function AthleteListRow({ athlete, onClick }: Props) {
         </span>
       )}
 
-      {/* Data columns */}
+      {/* Data columns — wrap below avatar/name on narrow screens */}
       {!athlete.contextUnavailable && !athlete.pendingCheckIn && athlete.loadScore !== null && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.md, flexShrink: 0 }}>
+        <div
+          className="athlete-row-data"
+          style={{ display: 'flex', alignItems: 'center', gap: tokens.space.md, flexShrink: 0, flexWrap: 'wrap' }}
+        >
+          <style>{`
+            @media (max-width: 540px) {
+              .athlete-row-data {
+                flex-basis: 100%;
+                justify-content: flex-start;
+                padding-left: 48px;
+              }
+            }
+          `}</style>
           {/* Load score */}
           <div style={{ textAlign: 'right', minWidth: '32px' }}>
             <div style={{
