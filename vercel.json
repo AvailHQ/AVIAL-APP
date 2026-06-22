@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "cd avail-prototype && npm ci",
+  "buildCommand": "cd avail-prototype && npm run build",
+  "outputDirectory": "avail-prototype/dist"
+}

@@ -46,3 +46,4 @@ This is a recent-log check, not a full project audit.
 - 2026-06-11 cc: M2 hardening — convert ToggleSwitch to button with role=switch/aria-checked and focus ring; verified focus, real-click toggle, and coach-view effect in browser.
 - 2026-06-11 cc: M2 hardening — mobile walkthrough at 375px across all screens; fix AthleteListRow overflow (badges wrap to second line under 540px) and hide squeezed chart scale labels on narrow screens; all pages now fit without horizontal scroll.
 - 2026-06-11 cc: M2 hardening — confirm .gitignore covers dist/node_modules/env/logs and git index contains no generated files. Mark Milestones 0, 1, 2 complete in milestone.md; M3 is next.
+- 2026-06-22 Codex: Add root vercel.json so Vercel can deploy avail-prototype while keeping the repository root as the Vercel root directory.
