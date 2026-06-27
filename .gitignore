@@ -31,3 +31,4 @@ Thumbs.db
 *.tsbuildinfo
 .vite/
 **/.vite/
+.vercel
