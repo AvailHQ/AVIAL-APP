@@ -66,10 +66,21 @@ export const S = {
   // Consent
   consentHeading: "Your data, your control",
   consentToggleLabel: "Share context with coaching staff",
-  consentOnDescription: "Your Load Score, direction, and confidence level are visible to your coaching staff. Your check-in details, cycle logs, and personal reflections are never shared.",
+  consentOnDescription: "Your Load Score, direction, and confidence level are visible to your coaching staff. Raw data access is controlled separately below.",
   consentOffDescription: "Your coaching staff will see \"Context unavailable\" for your profile. You can change this at any time.",
-  consentPrivacyNote: "Avail will never share your raw check-in data, cycle logs, or personal reflections with anyone — including your coaching staff.",
+  consentPrivacyNote: "Only the data you explicitly allow can be reviewed by your coaching staff. Personal reflections remain private.",
+  consentReviewHeading: "Coach review permissions",
+  consentRawDataToggleLabel: "Allow coach to review raw check-in data",
+  consentRawDataDescription: "Includes your individual sleep, energy, body feeling, and mental readiness responses.",
+  consentCycleDataToggleLabel: "Allow coach to review cycle data",
+  consentCycleDataDescription: "Includes cycle updates and history recorded in Avail.",
   consentSaved: "Settings saved",
+  dataInputsHeading: "Data inputs",
+  wearableToggleLabel: "Use wearable device data",
+  wearableToggleDescription: "Add recovery and activity signals from your wearable to your Avail context.",
+  wearableDeviceLabel: "Wearable device",
+  wearableDevicePlaceholder: "Select a device",
+  wearablePrivacyNote: "Connecting a wearable does not give coaching staff access to its raw data.",
 
   // Coach dashboard
   coachDashboardHeading: "Squad Context",
@@ -182,6 +193,7 @@ export const S = {
   consentVisible: "Visible",
   consentHidden: "Hidden",
   consentNeverShared: "Never shared",
+  consentReviewAllowed: "Review allowed",
 
   // Coach dashboard chart and table
   squadOverviewHeading: "Squad Load Overview",

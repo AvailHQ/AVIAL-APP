@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import type { AppState, AppView, DailyCheckIn as DailyCheckInData, ConsentState, SessionOutcome, DifferentDecision } from './types';
-import { ATHLETES, LOAD_SCORES, INITIAL_CONSENT, COACH_DASHBOARD_ORDER, PENDING_CHECK_IN_IDS } from './mockData';
+import type { AppState, AppView, DailyCheckIn as DailyCheckInData, ConsentState, WearableSettings, SessionOutcome, DifferentDecision } from './types';
+import { ATHLETES, LOAD_SCORES, INITIAL_CONSENT, INITIAL_WEARABLE_SETTINGS, COACH_DASHBOARD_ORDER, PENDING_CHECK_IN_IDS } from './mockData';
 import { buildCoachView } from './utils/coachView';
 import { tokens } from './tokens';
 import { S } from './strings';
@@ -23,6 +23,7 @@ const initialState: AppState = {
   checkIns: {},
   loadScores: LOAD_SCORES,
   consent: INITIAL_CONSENT,
+  wearableSettings: INITIAL_WEARABLE_SETTINGS,
   sessionOutcomes: {},
   differentDecisions: [],
   checkInSubmittedToday: false,
@@ -89,6 +90,13 @@ export default function App() {
     }));
   };
 
+  const handleWearableSettingsUpdate = (settings: WearableSettings) => {
+    setState(s => ({
+      ...s,
+      wearableSettings: { ...s.wearableSettings, [s.activeAthleteId]: settings },
+    }));
+  };
+
   const handleCoachSelectAthlete = (athleteId: string) => {
     setState(s => ({ ...s, selectedCoachAthleteId: athleteId, currentView: 'coach-athlete-detail' }));
   };
@@ -113,6 +121,7 @@ export default function App() {
   const activeAthlete = state.athletes.find(a => a.id === activeAthleteId)!;
   const activeLoadScore = state.loadScores[activeAthleteId];
   const activeConsent = state.consent[activeAthleteId];
+  const activeWearableSettings = state.wearableSettings[activeAthleteId];
 
   const coachViews = useMemo(
     () => COACH_DASHBOARD_ORDER.map(id =>
@@ -184,7 +193,9 @@ export default function App() {
         <ConsentSettings
           athleteName={activeAthlete.name}
           consentState={activeConsent}
+          wearableSettings={activeWearableSettings}
           onUpdate={handleConsentUpdate}
+          onWearableUpdate={handleWearableSettingsUpdate}
           onBack={() => navigate('athlete-dashboard')}
         />
       )}

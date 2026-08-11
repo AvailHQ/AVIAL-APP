@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import { tokens } from '../../tokens';
 import { S } from '../../strings';
-import type { ConsentState } from '../../types';
+import type { ConsentState, WearableDeviceType, WearableSettings } from '../../types';
 import PageWrapper from '../../components/shared/PageWrapper';
 import Card from '../../components/shared/Card';
 import BackButton from '../../components/shared/BackButton';
@@ -11,12 +11,28 @@ import ToggleSwitch from '../../components/shared/ToggleSwitch';
 interface Props {
   athleteName: string;
   consentState: ConsentState;
+  wearableSettings: WearableSettings;
   onUpdate: (newConsent: ConsentState) => void;
+  onWearableUpdate: (settings: WearableSettings) => void;
   onBack: () => void;
 }
 
-export default function ConsentSettings({ athleteName, consentState, onUpdate, onBack }: Props) {
+const wearableDeviceTypes: WearableDeviceType[] = [
+  'Apple Watch',
+  'Garmin',
+  'WHOOP',
+  'Oura Ring',
+  'Fitbit',
+  'Polar',
+  'Other',
+];
+
+export default function ConsentSettings({ consentState, wearableSettings, onUpdate, onWearableUpdate, onBack }: Props) {
   const [sharing, setSharing] = useState(consentState.sharingWithCoach);
+  const [rawDataReview, setRawDataReview] = useState(consentState.allowCoachRawDataReview);
+  const [cycleDataReview, setCycleDataReview] = useState(consentState.allowCoachCycleDataReview);
+  const [wearableEnabled, setWearableEnabled] = useState(wearableSettings.enabled);
+  const [wearableDevice, setWearableDevice] = useState<WearableDeviceType | null>(wearableSettings.deviceType);
   const [saved, setSaved] = useState(false);
   const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -26,16 +42,43 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
     };
   }, []);
 
-  const handleToggle = (value: boolean) => {
-    setSharing(value);
+  const saveConsent = (updates: Partial<ConsentState>) => {
     setSaved(true);
     onUpdate({
       ...consentState,
-      sharingWithCoach: value,
+      sharingWithCoach: sharing,
+      allowCoachRawDataReview: rawDataReview,
+      allowCoachCycleDataReview: cycleDataReview,
+      ...updates,
       lastUpdated: new Date().toISOString().split('T')[0],
     });
     if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
     savedTimerRef.current = setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleSharingToggle = (value: boolean) => {
+    setSharing(value);
+    saveConsent({ sharingWithCoach: value });
+  };
+
+  const handleRawDataReviewToggle = (value: boolean) => {
+    setRawDataReview(value);
+    saveConsent({ allowCoachRawDataReview: value });
+  };
+
+  const handleCycleDataReviewToggle = (value: boolean) => {
+    setCycleDataReview(value);
+    saveConsent({ allowCoachCycleDataReview: value });
+  };
+
+  const handleWearableToggle = (value: boolean) => {
+    setWearableEnabled(value);
+    onWearableUpdate({ ...wearableSettings, enabled: value, deviceType: wearableDevice });
+  };
+
+  const handleWearableDeviceChange = (value: WearableDeviceType) => {
+    setWearableDevice(value);
+    onWearableUpdate({ ...wearableSettings, enabled: wearableEnabled, deviceType: value });
   };
 
   return (
@@ -60,7 +103,7 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
       <Card style={{ marginBottom: tokens.space.lg }}>
         <ToggleSwitch
           on={sharing}
-          onChange={handleToggle}
+          onChange={handleSharingToggle}
           label={S.consentToggleLabel}
           description={sharing ? S.consentOnDescription : S.consentOffDescription}
         />
@@ -81,6 +124,87 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
         )}
       </Card>
 
+      <Card style={{ marginBottom: tokens.space.lg }} padding={tokens.space.lg}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.space.sm, marginBottom: tokens.space.lg }}>
+          <Icon icon="ph:watch" width={17} color={tokens.color.textSecondary} />
+          <div style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary }}>
+            {S.dataInputsHeading}
+          </div>
+        </div>
+        <ToggleSwitch
+          on={wearableEnabled}
+          onChange={handleWearableToggle}
+          label={S.wearableToggleLabel}
+          description={S.wearableToggleDescription}
+        />
+
+        {wearableEnabled && (
+          <div style={{ marginTop: tokens.space.lg }}>
+            <label
+              htmlFor="wearable-device"
+              style={{ display: 'block', fontSize: tokens.font.sm, fontWeight: tokens.font.medium, color: tokens.color.textPrimary, marginBottom: tokens.space.xs }}
+            >
+              {S.wearableDeviceLabel}
+            </label>
+            <div style={{ position: 'relative' }}>
+              <select
+                id="wearable-device"
+                value={wearableDevice ?? ''}
+                onChange={event => handleWearableDeviceChange(event.target.value as WearableDeviceType)}
+                style={{
+                  width: '100%',
+                  minHeight: '44px',
+                  padding: `0 40px 0 ${tokens.space.md}`,
+                  border: '1px solid rgba(0,0,0,0.12)',
+                  borderRadius: tokens.radius.sm,
+                  background: 'rgba(255,255,255,0.82)',
+                  color: wearableDevice ? tokens.color.textPrimary : tokens.color.textMuted,
+                  fontSize: tokens.font.md,
+                  fontFamily: tokens.font.family,
+                  appearance: 'none',
+                }}
+              >
+                <option value="" disabled>{S.wearableDevicePlaceholder}</option>
+                {wearableDeviceTypes.map(device => <option key={device} value={device}>{device}</option>)}
+              </select>
+              <Icon
+                icon="ph:caret-down"
+                width={16}
+                color={tokens.color.textMuted}
+                style={{ position: 'absolute', right: tokens.space.md, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', marginTop: tokens.space.sm }}>
+              <Icon icon="ph:lock-simple" width={14} color={tokens.color.textMuted} style={{ marginTop: '2px', flexShrink: 0 }} />
+              <span style={{ fontSize: tokens.font.xs, color: tokens.color.textMuted, lineHeight: '1.45' }}>
+                {S.wearablePrivacyNote}
+              </span>
+            </div>
+          </div>
+        )}
+      </Card>
+
+      <Card style={{ marginBottom: tokens.space.lg }} padding={tokens.space.lg}>
+        <div style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary, marginBottom: tokens.space.lg }}>
+          {S.consentReviewHeading}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.space.lg }}>
+          <ToggleSwitch
+            on={rawDataReview}
+            onChange={handleRawDataReviewToggle}
+            label={S.consentRawDataToggleLabel}
+            description={S.consentRawDataDescription}
+          />
+          <div style={{ height: '1px', background: 'rgba(0,0,0,0.07)' }} />
+          <ToggleSwitch
+            on={cycleDataReview}
+            onChange={handleCycleDataReviewToggle}
+            label={S.consentCycleDataToggleLabel}
+            description={S.consentCycleDataDescription}
+          />
+        </div>
+      </Card>
+
       {/* What coaches can see */}
       <Card style={{ marginBottom: tokens.space.lg }} padding={tokens.space.lg}>
         <div style={{ fontSize: tokens.font.sm, fontWeight: tokens.font.semibold, color: tokens.color.textPrimary, marginBottom: tokens.space.md }}>
@@ -92,27 +216,33 @@ export default function ConsentSettings({ athleteName, consentState, onUpdate, o
             { label: S.consentItemDirection, icon: 'ph:arrow-right', visible: sharing },
             { label: S.consentItemConfidence, icon: 'ph:chart-bar', visible: sharing },
             { label: S.consentItemTrend, icon: 'ph:chart-line-up', visible: sharing },
-            { label: S.consentItemCheckIns, icon: 'ph:note', visible: false },
-            { label: S.consentItemCycleLogs, icon: 'ph:calendar', visible: false },
-            { label: S.consentItemReflections, icon: 'ph:chat-text', visible: false },
+            { label: S.consentItemCheckIns, icon: 'ph:note', visible: rawDataReview, reviewPermission: true },
+            { label: S.consentItemCycleLogs, icon: 'ph:calendar', visible: cycleDataReview, reviewPermission: true },
+            { label: S.consentItemReflections, icon: 'ph:chat-text', visible: false, reviewPermission: false },
           ].map(item => (
             <div key={item.label} style={{
               display: 'flex', alignItems: 'center', gap: tokens.space.md,
-              opacity: !sharing && item.visible ? 0.4 : 1,
+              opacity: !item.reviewPermission && !sharing && item.visible ? 0.4 : 1,
             }}>
               <Icon
-                icon={item.visible && sharing ? 'ph:check-circle' : item.visible ? 'ph:check-circle' : 'ph:x-circle'}
+                icon={item.visible && (item.reviewPermission || sharing) ? 'ph:check-circle' : 'ph:x-circle'}
                 width={16}
-                color={item.visible && sharing ? tokens.color.statusMaintain : item.visible ? tokens.color.textMuted : '#9AA3AD'}
+                color={item.visible && (item.reviewPermission || sharing) ? tokens.color.statusMaintain : '#9AA3AD'}
               />
               <Icon icon={item.icon} width={14} color={tokens.color.textMuted} />
               <span style={{ fontSize: tokens.font.sm, color: tokens.color.textSecondary, flex: 1 }}>{item.label}</span>
               <span style={{
                 fontSize: tokens.font.xs,
-                color: (item.visible && sharing) ? tokens.color.statusMaintain : tokens.color.textMuted,
+                color: item.visible && (item.reviewPermission || sharing) ? tokens.color.statusMaintain : tokens.color.textMuted,
                 fontWeight: tokens.font.medium,
               }}>
-                {item.visible && sharing ? S.consentVisible : item.visible ? S.consentHidden : S.consentNeverShared}
+                {item.visible && item.reviewPermission
+                  ? S.consentReviewAllowed
+                  : item.visible && sharing
+                    ? S.consentVisible
+                    : item.reviewPermission
+                      ? S.consentHidden
+                      : S.consentNeverShared}
               </span>
             </div>
           ))}

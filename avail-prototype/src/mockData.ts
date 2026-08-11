@@ -2,6 +2,7 @@ import type {
   AthleteProfile,
   LoadScore,
   ConsentState,
+  WearableSettings,
 } from './types';
 
 export const ATHLETES: AthleteProfile[] = [
@@ -256,14 +257,21 @@ export const LOAD_SCORES: Record<string, LoadScore> = {
 };
 
 export const INITIAL_CONSENT: Record<string, ConsentState> = {
-  'maya-chen':      { athleteId: 'maya-chen',      sharingWithCoach: true,  lastUpdated: '2026-05-19' },
-  'sofia-rodriguez':{ athleteId: 'sofia-rodriguez', sharingWithCoach: true,  lastUpdated: '2026-05-19' },
-  'priya-sharma':   { athleteId: 'priya-sharma',   sharingWithCoach: true,  lastUpdated: '2026-05-18' },
-  'emma-thompson':  { athleteId: 'emma-thompson',  sharingWithCoach: true,  lastUpdated: '2026-05-19' },
-  'aisha-okafor':   { athleteId: 'aisha-okafor',   sharingWithCoach: false, lastUpdated: '2026-05-17' },
-  'zoe-mitchell':   { athleteId: 'zoe-mitchell',   sharingWithCoach: true,  lastUpdated: '2026-05-19' },
-  'chloe-williams': { athleteId: 'chloe-williams', sharingWithCoach: true,  lastUpdated: '2026-05-19' },
+  'maya-chen':       { athleteId: 'maya-chen',       sharingWithCoach: true,  allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-19' },
+  'sofia-rodriguez': { athleteId: 'sofia-rodriguez', sharingWithCoach: true,  allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-19' },
+  'priya-sharma':    { athleteId: 'priya-sharma',    sharingWithCoach: true,  allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-18' },
+  'emma-thompson':   { athleteId: 'emma-thompson',   sharingWithCoach: true,  allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-19' },
+  'aisha-okafor':    { athleteId: 'aisha-okafor',    sharingWithCoach: false, allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-17' },
+  'zoe-mitchell':    { athleteId: 'zoe-mitchell',    sharingWithCoach: true,  allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-19' },
+  'chloe-williams':  { athleteId: 'chloe-williams',  sharingWithCoach: true,  allowCoachRawDataReview: false, allowCoachCycleDataReview: false, lastUpdated: '2026-05-19' },
 };
+
+export const INITIAL_WEARABLE_SETTINGS: Record<string, WearableSettings> = Object.fromEntries(
+  ATHLETES.map(athlete => [
+    athlete.id,
+    { athleteId: athlete.id, enabled: false, deviceType: null },
+  ]),
+);
 
 // Athletes who have not yet submitted today's check-in
 export const PENDING_CHECK_IN_IDS = ['emma-thompson'];

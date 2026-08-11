@@ -73,7 +73,24 @@ export interface SessionOutcome {
 export interface ConsentState {
   athleteId: string;
   sharingWithCoach: boolean;
+  allowCoachRawDataReview: boolean;
+  allowCoachCycleDataReview: boolean;
   lastUpdated: string;
+}
+
+export type WearableDeviceType =
+  | 'Apple Watch'
+  | 'Garmin'
+  | 'WHOOP'
+  | 'Oura Ring'
+  | 'Fitbit'
+  | 'Polar'
+  | 'Other';
+
+export interface WearableSettings {
+  athleteId: string;
+  enabled: boolean;
+  deviceType: WearableDeviceType | null;
 }
 
 // The only shape passed to coach components — privacy firewall enforced in buildCoachView()
@@ -134,6 +151,7 @@ export interface AppState {
   checkIns: Record<string, DailyCheckIn[]>;
   loadScores: Record<string, LoadScore>;
   consent: Record<string, ConsentState>;
+  wearableSettings: Record<string, WearableSettings>;
   sessionOutcomes: Record<string, SessionOutcome[]>;
   differentDecisions: DifferentDecision[];
   checkInSubmittedToday: boolean;

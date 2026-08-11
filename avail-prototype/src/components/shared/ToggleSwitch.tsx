@@ -28,8 +28,6 @@ export default function ToggleSwitch({ on, onChange, label, description }: Toggl
         outline: 'none',
         borderRadius: tokens.radius.sm,
       }}
-      onFocus={e => { e.currentTarget.style.boxShadow = '0 0 0 2px rgba(61,155,107,0.4)'; }}
-      onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
     >
       <div>
         <div style={{ fontSize: tokens.font.md, fontWeight: tokens.font.medium, color: tokens.color.textPrimary, marginBottom: description ? '4px' : 0 }}>
